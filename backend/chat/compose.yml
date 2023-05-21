@@ -7,8 +7,11 @@ services:
       - ./src:/go/src
       - ./bin:/go/bin
       - ./csv:/go/csv
+      - ./sqlc:/go/sqlc
+      - ./migration:/go/migration
     networks:
       - aic-network
+    command: go get github.com/kyleconroy/sqlc/cmd/sqlc@latest && sqlc generate
 
   db:
     container_name: aic-db
