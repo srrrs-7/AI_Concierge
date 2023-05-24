@@ -2,18 +2,18 @@ package domain
 
 import (
 	"context"
-	"template/pkg/queue/domain/repository"
+
 	"template/util/env"
 )
 
 type Service struct {
 	env   *env.Env
-	queue repository.Queuer
+	queue Usecase
 }
 
 func NewService(
 	env *env.Env,
-	queue repository.Queuer,
+	queue Usecase,
 ) *Service {
 	return &Service{
 		env:   env,

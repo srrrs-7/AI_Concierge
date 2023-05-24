@@ -4,18 +4,18 @@ import (
 	"context"
 	"net/url"
 	"template/pkg/api/domain/entity"
-	"template/pkg/api/domain/repository"
+
 	"template/util/env"
 )
 
 type Service struct {
 	env    *env.Env
-	client repository.Client
+	client UseCase
 }
 
 func NewService(
 	env *env.Env,
-	client repository.Client,
+	client UseCase,
 ) *Service {
 	return &Service{
 		env:    env,

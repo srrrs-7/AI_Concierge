@@ -67,5 +67,6 @@ func main() {
 	)
 
 	// new router
-	driver.NewRouter(env, *logicRepo)
+	router := driver.NewRouter(env, logicRepo)
+	router.NewRouter()
 }

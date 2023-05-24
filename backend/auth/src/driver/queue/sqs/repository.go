@@ -2,7 +2,6 @@ package awsSqs
 
 import (
 	"context"
-	"template/pkg/queue/domain/repository"
 	"template/util/env"
 
 	"github.com/aws/aws-sdk-go/service/sqs"
@@ -16,7 +15,7 @@ type Repository struct {
 func NewRepository(
 	env *env.Env,
 	client *sqs.SQS,
-) repository.Queuer {
+) *Repository {
 	return &Repository{
 		env:    env,
 		client: client,

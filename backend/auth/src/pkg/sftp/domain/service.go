@@ -2,18 +2,18 @@ package domain
 
 import (
 	"context"
-	"template/pkg/sftp/domain/repository"
+
 	"template/util/env"
 )
 
 type Service struct {
 	env  *env.Env
-	sftp repository.SftpHandler
+	sftp UseCase
 }
 
 func NewService(
 	env *env.Env,
-	sftp repository.SftpHandler,
+	sftp UseCase,
 ) *Service {
 	return &Service{
 		env:  env,

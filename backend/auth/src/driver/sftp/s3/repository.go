@@ -2,7 +2,7 @@ package awsS3
 
 import (
 	"context"
-	"template/pkg/sftp/domain/repository"
+
 	"template/util/env"
 
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -16,7 +16,7 @@ type Repository struct {
 func NewRepository(
 	env *env.Env,
 	client *s3.S3,
-) repository.SftpHandler {
+) *Repository {
 	return &Repository{
 		env:    env,
 		client: client,

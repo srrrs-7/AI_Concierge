@@ -3,18 +3,18 @@ package domain
 import (
 	"context"
 	"template/pkg/db/table/entity"
-	"template/pkg/db/table/repository"
+
 	"template/util/env"
 )
 
 type Service struct {
 	env   *env.Env
-	store repository.Store
+	store UseCase
 }
 
 func NewService(
 	env *env.Env,
-	store repository.Store,
+	store UseCase,
 ) *Service {
 	return &Service{
 		env:   env,

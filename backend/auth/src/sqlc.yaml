@@ -1,12 +1,12 @@
 version: "2"
 sql:
   - engine: "mysql"
-    schema: "./_sqlc/table/schema.sql"
-    queries: "./_sqlc/table/query.sql"
+    schema: "_sqlc/table/schema.sql"
+    queries: "_sqlc/table/query.sql"
     gen:
       go:
         package: "table"
-        out: "./driver/db/table"
+        out: "driver/db/table"
         sql_package: "database/sql"
         emit_db_tags: true
         emit_json_tags: true

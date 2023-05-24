@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/url"
 	"template/driver/api"
-	"template/pkg/api/domain/repository"
 
 	"template/util/env"
 )
@@ -18,7 +17,7 @@ type Repository struct {
 func NewRepository(
 	env *env.Env,
 	client api.Client,
-) repository.Client {
+) *Repository {
 	return &Repository{
 		env:    env,
 		client: client,
