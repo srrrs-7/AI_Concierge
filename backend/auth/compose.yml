@@ -2,6 +2,7 @@ version: "3"
 services:
   auth_api:
     build: ./src
+    working_dir: /go/src
     volumes:
       - ./src:/go/src
       - ./bin:/go/bin

@@ -29,13 +29,10 @@ func (r *Repository) NewRouter() {
 	router := chi.NewRouter()
 	router.Use(log.NewLogging)
 
-	router.Route("/oauth/token", func(r chi.Router) {
-		r.Post("/create", func(w http.ResponseWriter, r *http.Request) {})
+	router.Route("/oauth/token", func(c chi.Router) {
+		c.Get("/get/", r.logicRepo.GetToken)
+		c.Get("/verify/", r.logicRepo.VerifyToken)
 	})
-
-	router.Get("/logicRepo/", r.logicRepo.MainLogic)
-	router.Get("/second/", r.logicRepo.SecondLogic)
-	router.Get("/sub/", r.logicRepo.SubLogic)
 
 	fmt.Println("start server on port:", r.env.HTTP_PORT)
 	err := http.ListenAndServe(":"+r.env.HTTP_PORT, router)

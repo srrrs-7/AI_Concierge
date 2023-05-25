@@ -8,7 +8,6 @@ RUN go mod download
 
 RUN go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 RUN go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
-RUN go get github.com/kyleconroy/sqlc/cmd/sqlc
 
 RUN go build -o /go/bin/auth.exe ./cmd
 

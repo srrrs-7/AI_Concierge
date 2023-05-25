@@ -1,42 +1,52 @@
 package pkg
 
 import (
+	"fmt"
 	"net/http"
-	api "template/pkg/api/domain"
-	db "template/pkg/db/table"
-	queue "template/pkg/queue/domain"
-	sftp "template/pkg/sftp/domain"
+	"template/driver/cache/redis"
+	sqsRepo "template/driver/queue/sqs"
+	s3Repo "template/driver/sftp/s3"
+	client "template/pkg/api/domain"
+	store "template/pkg/db/table"
 )
 
 type Repositories struct {
-	apiService   *api.Service
-	dbService    *db.Service
-	queueService *queue.Service
-	sftpService  *sftp.Service
+	client   *client.Service
+	store    *store.Service
+	rdsRepo      *redis.Repository
+	sqsRepo *sqsRepo.Repository
+	s3Repo  *s3Repo.Repository
 }
 
 func NewRepositories(
-	apiService *api.Service,
-	dbService *db.Service,
-	queueService *queue.Service,
-	sftpService *sftp.Service,
+	client   *client.Service,
+	store    *store.Service,
+	rdsRepo      *redis.Repository,
+	sqsRepo *sqsRepo.Repository,
+	s3Repo  *s3Repo.Repository,
 ) *Repositories {
 	return &Repositories{
-		apiService:   apiService,
-		dbService:    dbService,
-		queueService: queueService,
-		sftpService:  sftpService,
+		client: client,
+		store: store,
+		rdsRepo: rdsRepo,
+		sqsRepo: sqsRepo,
+		s3Repo: s3Repo,
 	}
 }
 
-func (repo *Repositories) MainLogic(w http.ResponseWriter, r *http.Request) {
+func (repo *Repositories) GetToken(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
+	// oauth api
+	// create token
+	// set redis
+	// insert db
+
+	fmt.Println(ctx)
+
+	w.Write([]byte("ok"))
 }
 
-func (repo *Repositories) SecondLogic(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (repo *Repositories) SubLogic(w http.ResponseWriter, r *http.Request) {
+func (repo *Repositories) VerifyToken(w http.ResponseWriter, r *http.Request) {
 
 }

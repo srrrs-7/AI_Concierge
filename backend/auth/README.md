@@ -10,4 +10,5 @@
 
   - go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
--
+- go-redis <https://github.com/redis/go-redis>
+  - github.com/redis/go-redis/v9

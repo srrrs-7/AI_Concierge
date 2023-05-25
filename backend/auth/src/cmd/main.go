@@ -6,6 +6,8 @@ import (
 	"template/driver"
 	"template/driver/api"
 	"template/driver/api/domain"
+	"template/driver/cache"
+	"template/driver/cache/redis"
 	"template/driver/db"
 	"template/driver/db/table"
 	"template/driver/queue"
@@ -15,8 +17,6 @@ import (
 	"template/pkg"
 	apiService "template/pkg/api/domain"
 	dbService "template/pkg/db/table"
-	queueService "template/pkg/queue/domain"
-	sftpService "template/pkg/sftp/domain"
 	"template/util/aws"
 	"template/util/env"
 )
@@ -41,29 +41,29 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	// sqlc queries
 	queries := table.New(db)
 	// aws session
+	rdb := cache.NewRedis(env)
 	sess := aws.NewAwsSession(env)
 	sqs := queue.NewSqs(env, sess)
 	s3 := sftp.NewS3(env, sess)
 	// repository
 	client := domain.NewRepository(env, cli)
 	store := table.NewRepository(env, db, queries)
-	queue := awsSqs.NewRepository(env, sqs)
-	sftp := awsS3.NewRepository(env, s3)
+	rdsRepo := redis.NewRepository(env, rdb)
+	sqsRepo := awsSqs.NewRepository(env, sqs)
+	s3Repo := awsS3.NewRepository(env, s3)
 	// service
 	apiService := apiService.NewService(env, client)
 	dbService := dbService.NewService(env, store)
-	queueService := queueService.NewService(env, queue)
-	sftpService := sftpService.NewService(env, sftp)
 
 	// logic
 	logicRepo := pkg.NewRepositories(
 		apiService,
 		dbService,
-		queueService,
-		sftpService,
+		rdsRepo,
+		sqsRepo,
+		s3Repo,
 	)
 
 	// new router

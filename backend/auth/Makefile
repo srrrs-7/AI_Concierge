@@ -5,6 +5,10 @@ db_url=mysql://root:secret@tcp(localhost:3306)/aic
 init:
 	cp compose.override.yml.sample compose.override.yml
 
+download:
+	docker compose run --name=auth --rm auth_api go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	docker compose run --name=auth --rm auth_api go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+
 run:
 	docker compose run --name=auth --rm auth_api go run ./cmd
 
