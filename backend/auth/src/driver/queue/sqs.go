@@ -1,7 +1,7 @@
 package queue
 
 import (
-	"template/util/env"
+	"ai_concierge/util/env"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"

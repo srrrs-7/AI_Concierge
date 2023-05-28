@@ -1,36 +1,36 @@
 package pkg
 
 import (
+	"ai_concierge/driver/cache/redis"
+	sqsRepo "ai_concierge/driver/queue/sqs"
+	s3Repo "ai_concierge/driver/sftp/s3"
+	client "ai_concierge/pkg/api/domain"
+	store "ai_concierge/pkg/db/table"
 	"fmt"
 	"net/http"
-	"template/driver/cache/redis"
-	sqsRepo "template/driver/queue/sqs"
-	s3Repo "template/driver/sftp/s3"
-	client "template/pkg/api/domain"
-	store "template/pkg/db/table"
 )
 
 type Repositories struct {
-	client   *client.Service
-	store    *store.Service
-	rdsRepo      *redis.Repository
+	client  *client.Service
+	store   *store.Service
+	rdsRepo *redis.Repository
 	sqsRepo *sqsRepo.Repository
 	s3Repo  *s3Repo.Repository
 }
 
 func NewRepositories(
-	client   *client.Service,
-	store    *store.Service,
-	rdsRepo      *redis.Repository,
+	client *client.Service,
+	store *store.Service,
+	rdsRepo *redis.Repository,
 	sqsRepo *sqsRepo.Repository,
-	s3Repo  *s3Repo.Repository,
+	s3Repo *s3Repo.Repository,
 ) *Repositories {
 	return &Repositories{
-		client: client,
-		store: store,
+		client:  client,
+		store:   store,
 		rdsRepo: rdsRepo,
 		sqsRepo: sqsRepo,
-		s3Repo: s3Repo,
+		s3Repo:  s3Repo,
 	}
 }
 

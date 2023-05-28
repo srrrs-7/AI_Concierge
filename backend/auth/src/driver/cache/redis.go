@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"template/util/env"
+	"ai_concierge/util/env"
 
 	"github.com/redis/go-redis/v9"
 )

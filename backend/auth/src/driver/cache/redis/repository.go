@@ -1,21 +1,21 @@
 package redis
 
 import (
+	"ai_concierge/util/env"
 	"context"
 	"errors"
-	"template/util/env"
 
 	"github.com/redis/go-redis/v9"
 )
 
 type Repository struct {
-	env *env.Env
+	env   *env.Env
 	redis *redis.Client
 }
 
 func NewRepository(env *env.Env, redis *redis.Client) *Repository {
 	return &Repository{
-		env: env,
+		env:   env,
 		redis: redis,
 	}
 }

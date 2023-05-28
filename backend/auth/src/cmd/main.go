@@ -1,24 +1,25 @@
 package main
 
 import (
+	"ai_concierge/driver"
+	"ai_concierge/driver/api"
+	"ai_concierge/driver/api/domain"
+	"ai_concierge/driver/cache"
+	"ai_concierge/driver/cache/redis"
+	"ai_concierge/driver/db"
+	"ai_concierge/driver/db/table"
+	"ai_concierge/driver/queue"
+	awsSqs "ai_concierge/driver/queue/sqs"
+	"ai_concierge/driver/sftp"
+	awsS3 "ai_concierge/driver/sftp/s3"
+	"ai_concierge/pkg"
+	apiService "ai_concierge/pkg/api/domain"
+	dbService "ai_concierge/pkg/db/table"
+	"ai_concierge/util/aws"
+	"ai_concierge/util/env"
+	utilLog "ai_concierge/util/log"
 	"flag"
 	"log"
-	"template/driver"
-	"template/driver/api"
-	"template/driver/api/domain"
-	"template/driver/cache"
-	"template/driver/cache/redis"
-	"template/driver/db"
-	"template/driver/db/table"
-	"template/driver/queue"
-	awsSqs "template/driver/queue/sqs"
-	"template/driver/sftp"
-	awsS3 "template/driver/sftp/s3"
-	"template/pkg"
-	apiService "template/pkg/api/domain"
-	dbService "template/pkg/db/table"
-	"template/util/aws"
-	"template/util/env"
 )
 
 func init() {
@@ -66,7 +67,8 @@ func main() {
 		s3Repo,
 	)
 
+	logger := utilLog.NewRepository()
 	// new router
-	router := driver.NewRouter(env, logicRepo)
+	router := driver.NewRouter(env, logger, logicRepo)
 	router.NewRouter()
 }

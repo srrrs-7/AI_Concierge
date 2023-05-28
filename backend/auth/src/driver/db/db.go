@@ -1,8 +1,8 @@
 package db
 
 import (
+	"ai_concierge/util/env"
 	"database/sql"
-	"template/util/env"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"

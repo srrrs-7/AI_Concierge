@@ -1,8 +1,8 @@
 package domain
 
 import (
+	"ai_concierge/pkg/db/table/entity"
 	"context"
-	"template/pkg/db/table/entity"
 )
 
 type UseCase interface {

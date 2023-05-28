@@ -1,11 +1,10 @@
 package domain
 
 import (
+	"ai_concierge/pkg/api/domain/entity"
+	"ai_concierge/util/env"
 	"context"
 	"net/url"
-	"template/pkg/api/domain/entity"
-
-	"template/util/env"
 )
 
 type Service struct {

@@ -1,8 +1,8 @@
 package aws
 
 import (
+	"ai_concierge/util/env"
 	"log"
-	"template/util/env"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"

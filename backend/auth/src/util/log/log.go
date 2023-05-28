@@ -6,21 +6,17 @@ import (
 )
 
 var (
-	std  = NewLogger()
+	std  = NewRepository()
 	Info = std.Info
 )
 
-type Logger interface {
-	Info(msg any)
+type Repository struct{}
+
+func NewRepository() *Repository {
+	return &Repository{}
 }
 
-type logger struct{}
-
-func NewLogger() Logger {
-	return &logger{}
-}
-
-func (l *logger) Info(msg any) {
+func (l *Repository) Info(msg any) {
 	log.Println(msg)
 }
 
