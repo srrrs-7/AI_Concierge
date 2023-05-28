@@ -3,17 +3,16 @@ package redis
 import (
 	"ai_concierge/util/env"
 	"context"
-	"errors"
 
-	"github.com/redis/go-redis/v9"
+	"github.com/redis/rueidis"
 )
 
 type Repository struct {
 	env   *env.Env
-	redis *redis.Client
+	redis rueidis.Client
 }
 
-func NewRepository(env *env.Env, redis *redis.Client) *Repository {
+func NewRepository(env *env.Env, redis rueidis.Client) *Repository {
 	return &Repository{
 		env:   env,
 		redis: redis,
@@ -21,7 +20,8 @@ func NewRepository(env *env.Env, redis *redis.Client) *Repository {
 }
 
 func (r *Repository) Set(ctx context.Context, key, value string) error {
-	err := r.redis.Set(ctx, key, value, 0).Err()
+
+	err := r.redis.Do(ctx, r.redis.B().Set().Key("key").Value("val").Nx().Build()).Error()
 	if err != nil {
 		return err
 	}
@@ -30,12 +30,11 @@ func (r *Repository) Set(ctx context.Context, key, value string) error {
 }
 
 func (r *Repository) Get(ctx context.Context, key string) (string, error) {
-	v, err := r.redis.Get(ctx, key).Result()
-	if err == redis.Nil {
-		return "", errors.New("redis key not found")
-	} else if err != nil {
+
+	strMap, err := r.redis.Do(ctx, r.redis.B().Get().Key(key).Build()).AsStrMap()
+	if err != nil {
 		return "", err
 	}
 
-	return v, nil
+	return strMap[key], nil
 }

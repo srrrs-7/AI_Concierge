@@ -43,8 +43,13 @@ func main() {
 	}
 	defer db.Close()
 	queries := table.New(db)
+
+	// redis client
+	rdb, err := cache.NewRedis(env)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// aws session
-	rdb := cache.NewRedis(env)
 	sess := aws.NewAwsSession(env)
 	sqs := queue.NewSqs(env, sess)
 	s3 := sftp.NewS3(env, sess)

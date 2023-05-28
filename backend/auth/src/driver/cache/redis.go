@@ -3,15 +3,14 @@ package cache
 import (
 	"ai_concierge/util/env"
 
-	"github.com/redis/go-redis/v9"
+	"github.com/redis/rueidis"
 )
 
-func NewRedis(env *env.Env) *redis.Client {
-	redis := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
+func NewRedis(env *env.Env) (rueidis.Client, error) {
+	rds, err := rueidis.NewClient(rueidis.ClientOption{InitAddress: []string{env.REDIS_URL}})
+	if err != nil {
+		return nil, err
+	}
 
-	return redis
+	return rds, nil
 }
