@@ -1,28 +1,24 @@
 version: "3"
 services:
-  gopher:
-    image: golang:1.20
+  auth_api:
+    build: ./src
     working_dir: /go/src
     volumes:
       - ./src:/go/src
       - ./bin:/go/bin
       - ./csv:/go/csv
-      - ./sqlc:/go/sqlc
-      - ./migration:/go/migration
+      - ./log:/go/log
     networks:
       - aic-network
-    command: go get github.com/kyleconroy/sqlc/cmd/sqlc@latest && sqlc generate
 
-  db:
-    container_name: aic-db
+  auth_db:
+    container_name: auth_db
     image: mysql:latest
-    volumes:
-      - ./volume:/docker-entrypoint-initdb.d
     networks:
       - aic-network
 
-  redis:
-    container_name: aic-redis
+  auth_cache:
+    container_name: auth_cache
     image: redis:latest
     networks:
       - aic-network
@@ -31,8 +27,8 @@ services:
     container_name: localstack
     image: localstack/localstack
     ports:
-      - "127.0.0.1:4566:4566" # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559" # external services port range
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
     environment:
       - DEBUG=${DEBUG-}
       - DOCKER_HOST=unix:///var/run/docker.sock
@@ -42,18 +38,14 @@ services:
     networks:
       - aic-network
 
-  sendgrid:
-    container_name: sendgrid
-    image: ykanazawa/sendgrid-maildev
-    hostname: sendgrid-maildev
+  aws:
+    container_name: aws
+    image: amazon/aws-cli
     environment:
-      - SENDGRID_DEV_API_SERVER=:3030
-      - SENDGRID_DEV_API_KEY=test_api_key
-      - SENDGRID_DEV_SMTP_SERVER=127.0.0.1:1025
-    ports:
-      - 1025:1025 #sendGrid → maildevへの中継
-      - 1080:1080 #maildevのブラウザ確認用ポート
-      - 3030:3030 #SendGridのAPIエンドポイントのポート
+      AWS_ACCESS_KEY_ID: foo
+      AWS_SECRET_ACCESS_KEY: foo
+      AWS_DEFAULT_REGION: ap-northeast-1
+      NO_PROXY: 169.254.169.254
     networks:
       - aic-network
 

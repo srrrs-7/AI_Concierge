@@ -3,6 +3,7 @@ package log
 import (
 	"log"
 	"net/http"
+	"os"
 )
 
 var (
@@ -21,6 +22,18 @@ func (l *Repository) Info(msg any) {
 }
 
 func NewLogging(next http.Handler) http.Handler {
+	file, err := os.OpenFile("../log/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal("ログファイルの作成に失敗しました:", err)
+	}
+	defer file.Close()
+
+	// ログの出力先をファイルに設定
+	log.SetOutput(file)
+
+	// ログのフォーマットを設定
+	log.SetFlags(log.Ldate | log.Ltime)
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("receive request: %s %s", r.Method, r.RequestURI)
 		next.ServeHTTP(w, r)

@@ -38,19 +38,24 @@ func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
 }
 
 const getAuthor = `-- name: GetAuthor :one
-SELECT id, name, bio FROM authors
+SELECT id, name, number, bio FROM authors
 WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetAuthor(ctx context.Context, id int64) (Author, error) {
 	row := q.db.QueryRowContext(ctx, getAuthor, id)
 	var i Author
-	err := row.Scan(&i.ID, &i.Name, &i.Bio)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Number,
+		&i.Bio,
+	)
 	return i, err
 }
 
 const listAuthors = `-- name: ListAuthors :many
-SELECT id, name, bio FROM authors
+SELECT id, name, number, bio FROM authors
 ORDER BY name
 `
 
@@ -63,7 +68,12 @@ func (q *Queries) ListAuthors(ctx context.Context) ([]Author, error) {
 	var items []Author
 	for rows.Next() {
 		var i Author
-		if err := rows.Scan(&i.ID, &i.Name, &i.Bio); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Number,
+			&i.Bio,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

@@ -34,7 +34,21 @@ func NewRepositories(
 	}
 }
 
-func (repo *Repositories) GetToken(w http.ResponseWriter, r *http.Request) {
+func (repo *Repositories) Register(w http.ResponseWriter, r *http.Request) {
+	// ID, password register
+}
+
+func (repo *Repositories) GetIDToken(w http.ResponseWriter, r *http.Request) {
+
+	// oauth api
+	// create token
+	// set redis
+	// insert db
+
+	w.Write([]byte("ok"))
+}
+
+func (repo *Repositories) GetAccessToken(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// oauth api
@@ -47,6 +61,8 @@ func (repo *Repositories) GetToken(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ok"))
 }
 
-func (repo *Repositories) VerifyToken(w http.ResponseWriter, r *http.Request) {
+func (repo *Repositories) VerifyAccessToken(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
+	fmt.Println(ctx)
 }

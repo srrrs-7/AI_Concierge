@@ -1,5 +1,5 @@
 
-db_url=mysql://root:secret@tcp(localhost:3306)/aic
+db_url=mysql://root:secret@tcp(auth_db:3306)/aic
 
 
 init:
@@ -31,10 +31,10 @@ migrate_file:
 	docker compose run --name=auth --rm auth_api migrate create -ext sql -dir _migration migrate
 
 migrate_up:
-	docker compose run --name=auth --rm auth_api migrate -path _migration -database $(db_url) up
+	docker compose run --name=auth --rm auth_api migrate -path _migration -database "$(db_url)" up
 
 migrate_down:
-	docker compose run --name=auth --rm auth_api migrate -path _migration -database $(db_url) down
+	docker compose run --name=auth --rm auth_api migrate -path _migration -database "$(db_url)" down
 
 bucket:
 	docker compose run --name=auth --rm aws s3 mb s3://aic --endpoint-url=http://localstack:4566

@@ -1,7 +1,8 @@
 version: "3"
 services:
-  gopher:
-    image: golang:1.20
+  auth_api:
+    ports:
+      - 8888:8888
     environment:
       - DB_HOST=db
       - DB_PORT=3306
@@ -14,16 +15,17 @@ services:
     secrets:
       - ssh-key
 
-  db:
+  auth_db:
     ports:
       - 3306:3306
     environment:
       - MYSQL_DATABASE=aic
       - MYSQL_ROOT_PASSWORD=secret
 
-  redis:
+  auth_cache:
     ports:
       - 6379:6379
+
 secrets:
   ssh-key:
     file: ~/.ssh/ec2.pem

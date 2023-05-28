@@ -1,9 +1,10 @@
 package table
 
 import (
+	"ai_concierge/pkg/db/table/entity"
+	"ai_concierge/util/env"
 	"context"
 	"database/sql"
-	"template/util/env"
 )
 
 type Repository struct {
@@ -24,11 +25,11 @@ func NewRepository(
 	}
 }
 
-func (r *Repository) Find(ctx context.Context) (authors []*Author, err error) {
+func (r *Repository) Find(ctx context.Context) (authors []*entity.Author, err error) {
 	return nil, nil
 }
 
-func (r *Repository) FindByID(ctx context.Context) (author *Author, err error) {
+func (r *Repository) FindByID(ctx context.Context) (author *entity.Author, err error) {
 	return nil, nil
 }
 

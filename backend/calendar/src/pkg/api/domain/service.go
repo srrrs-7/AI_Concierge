@@ -1,21 +1,20 @@
 package domain
 
 import (
+	"ai_concierge/pkg/api/domain/entity"
+	"ai_concierge/util/env"
 	"context"
 	"net/url"
-	"template/pkg/api/domain/entity"
-	"template/pkg/api/domain/repository"
-	"template/util/env"
 )
 
 type Service struct {
 	env    *env.Env
-	client repository.Client
+	client UseCase
 }
 
 func NewService(
 	env *env.Env,
-	client repository.Client,
+	client UseCase,
 ) *Service {
 	return &Service{
 		env:    env,
