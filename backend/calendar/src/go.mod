@@ -1,4 +1,4 @@
-module ai_concierge
+module calendar
 
 go 1.20
 
@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.44.271
 	github.com/go-chi/chi v1.5.4
 	github.com/go-sql-driver/mysql v1.7.1
-	github.com/redis/go-redis/v9 v9.0.4
+	github.com/redis/go-redis/v9 v9.0.5
 )
 
 require (
