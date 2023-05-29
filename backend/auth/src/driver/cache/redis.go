@@ -7,7 +7,11 @@ import (
 )
 
 func NewRedis(env *env.Env) (rueidis.Client, error) {
-	rds, err := rueidis.NewClient(rueidis.ClientOption{InitAddress: []string{env.REDIS_URL}})
+	rds, err := rueidis.NewClient(
+		rueidis.ClientOption{
+			InitAddress: []string{env.REDIS_URL},
+		},
+	)
 	if err != nil {
 		return nil, err
 	}
