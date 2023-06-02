@@ -8,11 +8,11 @@ import (
 )
 
 type Repository struct {
-	env   *env.Env
+	env   *env.EnvParams[string]
 	redis rueidis.Client
 }
 
-func NewRepository(env *env.Env, redis rueidis.Client) *Repository {
+func NewRepository(env *env.EnvParams[string], redis rueidis.Client) *Repository {
 	return &Repository{
 		env:   env,
 		redis: redis,

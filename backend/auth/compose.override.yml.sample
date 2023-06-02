@@ -2,29 +2,30 @@ version: "3"
 services:
   auth_api:
     ports:
-      - 8888:8888
+      - "8888:8888"
     environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASS=secret
-      - DB_NAME=aic
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - DB_DRIVER=mysql
+      - DB_ADDR=http://localhost:3306
+      - API_URL=http://localhost:8080
+      - HTTP_PORT=8888
+      - REDIS_URL=localhost:6379
+      - AWS_REGION=ap-northeast-1
+      - AWS_S3_BUCKET=local-bucket
+      - AWS_SQS_URL=http://sqs.ap-northeast-1.amazonaws.com/123456789012/local-queue
       - SSH_KEY=/run/secrets/ssh-key
     secrets:
       - ssh-key
 
   auth_db:
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       - MYSQL_DATABASE=aic
       - MYSQL_ROOT_PASSWORD=secret
 
   auth_cache:
     ports:
-      - 6379:6379
+      - "6379:6379"
 
 secrets:
   ssh-key:

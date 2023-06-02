@@ -1,20 +1,20 @@
 package table
 
 import (
-	"ai_concierge/pkg/db/table/entity"
+	"ai_concierge/pkg/entity"
 	"ai_concierge/util/env"
 	"context"
 	"database/sql"
 )
 
 type Repository struct {
-	env     *env.Env
+	env     *env.EnvParams[string]
 	db      *sql.DB
 	queries *Queries
 }
 
 func NewRepository(
-	env *env.Env,
+	env *env.EnvParams[string],
 	db *sql.DB,
 	queries *Queries,
 ) *Repository {

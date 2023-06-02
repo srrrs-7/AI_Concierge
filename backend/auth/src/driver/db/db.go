@@ -8,8 +8,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func NewDb(env *env.Env) (*sql.DB, error) {
-	db, err := sql.Open(env.DB_DRIVER, env.DB_ADDR)
+func NewDb(env *env.EnvParams[string]) (*sql.DB, error) {
+	db, err := sql.Open(env.DB_DRIVER.Value, env.DB_ADDR.Value)
 	if err != nil {
 		return nil, err
 	}

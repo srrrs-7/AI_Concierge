@@ -1,38 +1,50 @@
 package env
 
 import (
+	"fmt"
 	"os"
 )
 
-type Env struct {
-	DB_DRIVER     string
-	DB_ADDR       string
-	API_URL       string
-	HTTP_PORT     string
-	REDIS_URL     string
-	AWS_REGION    string
-	AWS_S3_BUCKET string
-	AWS_SQS_URL   string
+type Value interface {
+	~string
 }
 
-func SetEnv() *Env {
-	return &Env{
-		DB_DRIVER:     getEnv("DB_DRIVER", "mysql"),
-		DB_ADDR:       getEnv("DB_ADDR", "root:secret@tcp(localhost:3306)/aic?charset=utf8mb4&parseTime=True&loc=Local"),
-		API_URL:       getEnv("DOMAIN_URL", "http://localhost:8080"),
-		HTTP_PORT:     getEnv("HTTP_PORT", "8888"),
-		REDIS_URL:     getEnv("REDIS_URL", "http://localhost:6379"),
-		AWS_REGION:    getEnv("AWS_REGION", "ap-northeast-1"),
-		AWS_S3_BUCKET: getEnv("AWS_S3_BUCKET", "local-bucket"),
-		AWS_SQS_URL:   getEnv("AWS_SQS_URL", "https://sqs.ap-northeast-1.amazonaws.com/123456789012/my-sqs"),
+type EnvParams[T Value] struct {
+	DB_DRIVER     Env[T]
+	DB_ADDR       Env[T]
+	API_URL       Env[T]
+	HTTP_PORT     Env[T]
+	REDIS_URL     Env[T]
+	AWS_REGION    Env[T]
+	AWS_S3_BUCKET Env[T]
+	AWS_SQS_URL   Env[T]
+}
+
+type Env[T Value] struct {
+	Name  string
+	Value T
+}
+
+func newEnv[T Value](name string) Env[T] {
+	return Env[T]{
+		Name:  name,
+		Value: T(os.Getenv(name)),
 	}
 }
 
-func getEnv(key, value string) string {
-	v := os.Getenv(key)
-	if v != "" {
-		return v
-	}
+func (e Env[T]) Output() string {
+	return fmt.Sprintf("%s=%s", e.Name, e.Value)
+}
 
-	return value
+func SetEnv[T Value]() *EnvParams[T] {
+	return &EnvParams[T]{
+		DB_DRIVER:     newEnv[T]("DB_DRIVER"),
+		DB_ADDR:       newEnv[T]("DB_ADDR"),
+		API_URL:       newEnv[T]("API_URL"),
+		HTTP_PORT:     newEnv[T]("HTTP_PORT"),
+		REDIS_URL:     newEnv[T]("REDIS_URL"),
+		AWS_REGION:    newEnv[T]("AWS_REGION"),
+		AWS_S3_BUCKET: newEnv[T]("AWS_S3_BUCKET"),
+		AWS_SQS_URL:   newEnv[T]("AWS_SQS_URL"),
+	}
 }

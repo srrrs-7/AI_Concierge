@@ -9,12 +9,12 @@ import (
 )
 
 type Repository struct {
-	env    *env.Env
+	env    *env.EnvParams[string]
 	client api.Client
 }
 
 func NewRepository(
-	env *env.Env,
+	env *env.EnvParams[string],
 	client api.Client,
 ) *Repository {
 	return &Repository{

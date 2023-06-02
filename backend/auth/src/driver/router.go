@@ -13,13 +13,13 @@ import (
 )
 
 type Repository struct {
-	env       *env.Env
+	env       *env.EnvParams[string]
 	logger    *log.Repository
 	logicRepo *pkg.Repositories
 }
 
 func NewRouter(
-	env *env.Env,
+	env *env.EnvParams[string],
 	logger *log.Repository,
 	logicRepo *pkg.Repositories,
 ) *Repository {
@@ -51,8 +51,8 @@ func (r *Repository) NewRouter() {
 		c.Get("/verify", r.logicRepo.VerifyAccessToken) // トークン認証
 	})
 
-	r.logger.Info(fmt.Sprintf("start server on port: %s", r.env.HTTP_PORT))
-	err := http.ListenAndServe(":"+r.env.HTTP_PORT, router)
+	r.logger.Info(fmt.Sprintf("start server on port: %s", r.env.HTTP_PORT.Value))
+	err := http.ListenAndServe(":"+r.env.HTTP_PORT.Value, router)
 	if err != nil {
 		panic(err)
 	}

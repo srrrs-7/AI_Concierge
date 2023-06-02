@@ -8,13 +8,15 @@ import (
 	"ai_concierge/driver/cache/redis"
 	"ai_concierge/driver/db"
 	"ai_concierge/driver/db/table"
+	"ai_concierge/driver/file"
+	awsS3 "ai_concierge/driver/file/s3"
 	"ai_concierge/driver/queue"
 	awsSqs "ai_concierge/driver/queue/sqs"
-	"ai_concierge/driver/sftp"
-	awsS3 "ai_concierge/driver/sftp/s3"
 	"ai_concierge/pkg"
-	apiService "ai_concierge/pkg/api/domain"
-	dbService "ai_concierge/pkg/db/table"
+	"ai_concierge/pkg/domain/oauth"
+	"ai_concierge/pkg/domain/oidc"
+	"ai_concierge/pkg/domain/token"
+
 	"ai_concierge/util/aws"
 	"ai_concierge/util/env"
 	utilLog "ai_concierge/util/log"
@@ -27,7 +29,7 @@ func init() {
 }
 
 func main() {
-	env := env.SetEnv()
+	env := env.SetEnv[string]()
 	// api client
 	cli := api.NewClient(&api.Auth{
 		AuthUrl: "",
@@ -52,7 +54,7 @@ func main() {
 	// aws session
 	sess := aws.NewAwsSession(env)
 	sqs := queue.NewSqs(env, sess)
-	s3 := sftp.NewS3(env, sess)
+	s3 := file.NewS3(env, sess)
 	// repository
 	client := domain.NewRepository(env, cli)
 	store := table.NewRepository(env, db, queries)
@@ -60,16 +62,15 @@ func main() {
 	sqsRepo := awsSqs.NewRepository(env, sqs)
 	s3Repo := awsS3.NewRepository(env, s3)
 	// service
-	apiService := apiService.NewService(env, client)
-	dbService := dbService.NewService(env, store)
+	oauthService := oauth.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
+	oidcService := oidc.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
+	tokenService := token.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
 
 	// logic
 	logicRepo := pkg.NewRepositories(
-		apiService,
-		dbService,
-		rdsRepo,
-		sqsRepo,
-		s3Repo,
+		oauthService,
+		oidcService,
+		tokenService,
 	)
 
 	logger := utilLog.NewRepository()

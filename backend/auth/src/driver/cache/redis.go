@@ -6,10 +6,10 @@ import (
 	"github.com/redis/rueidis"
 )
 
-func NewRedis(env *env.Env) (rueidis.Client, error) {
+func NewRedis(env *env.EnvParams[string]) (rueidis.Client, error) {
 	rds, err := rueidis.NewClient(
 		rueidis.ClientOption{
-			InitAddress: []string{env.REDIS_URL},
+			InitAddress: []string{env.REDIS_URL.Value},
 		},
 	)
 	if err != nil {
