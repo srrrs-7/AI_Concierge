@@ -10,29 +10,21 @@ import (
 	"strings"
 )
 
-type basicAuth struct {
-	id       string
-	password string
-}
-
 type Service struct {
-	basicAuth *basicAuth
-	env       *env.EnvParams[string]
-	store     DbUseCase
-	redis     RdsUseCase
+	env   *env.EnvParams[string]
+	store DbUseCase
+	redis RdsUseCase
 }
 
 func NewService(
-	basicAuth *basicAuth,
 	env *env.EnvParams[string],
 	store DbUseCase,
 	redis RdsUseCase,
 ) *Service {
 	return &Service{
-		basicAuth: basicAuth,
-		env:       env,
-		store:     store,
-		redis:     redis,
+		env:   env,
+		store: store,
+		redis: redis,
 	}
 }
 
@@ -61,14 +53,11 @@ func (s *Service) BasicAuth(r *http.Request) (id, password string, err error) {
 	return credentials[0], credentials[1], nil
 }
 
-func (s *Service) Hash(id, password string) {
+func (s *Service) Hash(id, password string) (string, string) {
 
 	hash := sha256.Sum256([]byte(password))
 	hashString := hex.EncodeToString(hash[:])
 
-	s.basicAuth = &basicAuth{
-		id:       id,
-		password: hashString,
-	}
+	return id, hashString
 
 }

@@ -15,13 +15,13 @@ import (
 type Repository struct {
 	env       *env.EnvParams[string]
 	logger    *log.Repository
-	logicRepo *pkg.Repositories
+	logicRepo *pkg.Repository
 }
 
 func NewRouter(
 	env *env.EnvParams[string],
 	logger *log.Repository,
-	logicRepo *pkg.Repositories,
+	logicRepo *pkg.Repository,
 ) *Repository {
 	return &Repository{
 		env:       env,
@@ -36,19 +36,18 @@ func (r *Repository) NewRouter() {
 
 	// register
 	router.Route("/register", func(c chi.Router) {
-		c.Post("/", r.logicRepo.Register)
+		c.Post("/", r.logicRepo.Auth)
 	})
 
 	// OpenID connect
 	router.Route("/oidc", func(c chi.Router) {
 		c.Use(r.basicAuth)
-		c.Get("/token", r.logicRepo.GetIDToken) // ID tokenの作成
+		c.Get("/token", r.logicRepo.Oidc) // ID tokenの作成
 	})
 
 	// OAuth
 	router.Route("/oauth/token", func(c chi.Router) {
-		c.Get("/create", r.logicRepo.GetAccessToken)    // 認可サーバーでトークン発行
-		c.Get("/verify", r.logicRepo.VerifyAccessToken) // トークン認証
+		c.Get("/create", r.logicRepo.Token) // 認可サーバーでトークン発行
 	})
 
 	r.logger.Info(fmt.Sprintf("start server on port: %s", r.env.HTTP_PORT.Value))

@@ -13,10 +13,10 @@ import (
 	"ai_concierge/driver/queue"
 	awsSqs "ai_concierge/driver/queue/sqs"
 	"ai_concierge/pkg"
+	"ai_concierge/pkg/domain/auth"
 	"ai_concierge/pkg/domain/oauth"
 	"ai_concierge/pkg/domain/oidc"
 	"ai_concierge/pkg/domain/token"
-
 	"ai_concierge/util/aws"
 	"ai_concierge/util/env"
 	utilLog "ai_concierge/util/log"
@@ -47,7 +47,7 @@ func main() {
 	queries := table.New(db)
 
 	// redis client
-	rdb, err := cache.NewRedis(env)
+	rds, err := cache.NewRedis(env)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,19 +58,22 @@ func main() {
 	// repository
 	client := domain.NewRepository(env, cli)
 	store := table.NewRepository(env, db, queries)
-	rdsRepo := redis.NewRepository(env, rdb)
+	rdsRepo := redis.NewRepository(env, rds)
 	sqsRepo := awsSqs.NewRepository(env, sqs)
 	s3Repo := awsS3.NewRepository(env, s3)
 	// service
+	authService := auth.NewService(env, store, rdsRepo)
 	oauthService := oauth.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
 	oidcService := oidc.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
 	tokenService := token.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
 
 	// logic
-	logicRepo := pkg.NewRepositories(
-		oauthService,
-		oidcService,
-		tokenService,
+	logicRepo := pkg.NewRepository(
+		env,
+		*authService,
+		*oidcService,
+		*oauthService,
+		*tokenService,
 	)
 
 	logger := utilLog.NewRepository()

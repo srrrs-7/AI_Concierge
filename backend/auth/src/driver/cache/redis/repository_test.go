@@ -1,7 +1,42 @@
 package redis
 
-import "testing"
+import (
+	"ai_concierge/driver/cache"
+	"ai_concierge/util/env"
+	"log"
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+)
 
 func Test_GetDomain(t *testing.T) {
+
+	type args struct {
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "",
+			args: args{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			rds, err := cache.NewRedis(&env.EnvParams[string]{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			got := NewRepository(&env.EnvParams[string]{}, rds)
+
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("GetDomain() = %v", diff)
+			}
+		})
+	}
 
 }
