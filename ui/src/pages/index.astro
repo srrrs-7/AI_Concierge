@@ -1,4 +1,7 @@
 ---
+
+import Header from "../layouts/Header.svelte";
+
 ---
 
 <html lang="en">
@@ -6,9 +9,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Index</title>
+    <title>AI Concierge</title>
   </head>
+
   <body>
-    <a href="/stamp">打刻画面</a>
+    <Header />
+    <a href="/login">Login</a>
   </body>
+
 </html>

@@ -1,8 +1,24 @@
 ---
+import LoginForm from '../../components/molecules/LoginForm.svelte';
 ---
 
-<div>
-  <h1>Login</h1>
-  <p>ID</p>
-  <p>Password</p>
-</div>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>AI Concierge</title>
+  </head>
+
+  <body>
+    <div>
+      <h1>Login</h1>
+      <p>ID</p>
+      <p>Password</p>
+    </div>
+
+    <LoginForm />
+  </body>
+
+</html>
+

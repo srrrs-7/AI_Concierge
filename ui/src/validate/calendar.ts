@@ -5,7 +5,7 @@ export const validateString = z.string().min(3).max(10);
 
 // english validation
 const englishRegex = /^[A-Z]+$/;
-export const validateDate = z.string().regex(englishRegex);
+export const validateEnglish = z.string().regex(englishRegex);
 
 // number validation
 const numberRegex = /^[1-9]+$/;
