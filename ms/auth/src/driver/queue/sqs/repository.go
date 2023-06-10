@@ -1,7 +1,7 @@
 package awsSqs
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 	"context"
 
 	"github.com/aws/aws-sdk-go/service/sqs"

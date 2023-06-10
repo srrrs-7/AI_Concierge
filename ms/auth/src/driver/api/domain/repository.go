@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"ai_concierge/driver/api"
-	"ai_concierge/util/env"
+	"auth/driver/api"
+	"auth/util/env"
 	"context"
 	"net/http"
 	"net/url"

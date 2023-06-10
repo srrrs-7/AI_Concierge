@@ -1,7 +1,7 @@
 package oidc
 
 import (
-	"ai_concierge/pkg/entity"
+	"auth/pkg/entity"
 	"context"
 	"net/http"
 	"net/url"

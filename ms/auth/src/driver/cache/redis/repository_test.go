@@ -1,8 +1,8 @@
 package redis
 
 import (
-	"ai_concierge/driver/cache"
-	"ai_concierge/util/env"
+	"auth/driver/cache"
+	"auth/util/env"
 	"log"
 	"testing"
 

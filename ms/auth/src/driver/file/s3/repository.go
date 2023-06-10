@@ -1,7 +1,7 @@
 package awsS3
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 	"context"
 
 	"github.com/aws/aws-sdk-go/service/s3"

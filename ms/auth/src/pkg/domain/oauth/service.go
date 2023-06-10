@@ -1,8 +1,8 @@
 package oauth
 
 import (
-	"ai_concierge/pkg/entity"
-	"ai_concierge/util/env"
+	"auth/pkg/entity"
+	"auth/util/env"
 	"context"
 	"net/url"
 )

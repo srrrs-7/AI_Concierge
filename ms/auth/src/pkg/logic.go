@@ -1,11 +1,11 @@
 package pkg
 
 import (
-	"ai_concierge/pkg/domain/auth"
-	"ai_concierge/pkg/domain/oauth"
-	"ai_concierge/pkg/domain/oidc"
-	"ai_concierge/pkg/domain/token"
-	"ai_concierge/util/env"
+	"auth/pkg/domain/auth"
+	"auth/pkg/domain/oauth"
+	"auth/pkg/domain/oidc"
+	"auth/pkg/domain/token"
+	"auth/util/env"
 	"net/http"
 )
 

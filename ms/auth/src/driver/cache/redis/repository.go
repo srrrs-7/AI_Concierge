@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 	"context"
 
 	"github.com/redis/rueidis"

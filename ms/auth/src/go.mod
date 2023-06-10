@@ -1,4 +1,4 @@
-module ai_concierge
+module auth
 
 go 1.20
 

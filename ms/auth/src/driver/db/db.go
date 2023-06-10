@@ -1,7 +1,7 @@
 package db
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 	"database/sql"
 	"time"
 

@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"

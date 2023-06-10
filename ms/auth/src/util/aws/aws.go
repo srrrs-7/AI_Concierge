@@ -1,7 +1,7 @@
 package aws
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 	"log"
 
 	"github.com/aws/aws-sdk-go/aws"

@@ -1,7 +1,7 @@
 package file
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"

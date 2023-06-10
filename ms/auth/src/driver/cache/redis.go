@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"ai_concierge/util/env"
+	"auth/util/env"
 
 	"github.com/redis/rueidis"
 )

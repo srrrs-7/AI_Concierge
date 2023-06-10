@@ -1,9 +1,9 @@
 package driver
 
 import (
-	"ai_concierge/pkg"
-	"ai_concierge/util/env"
-	"ai_concierge/util/log"
+	"auth/pkg"
+	"auth/util/env"
+	"auth/util/log"
 	"encoding/base64"
 	"fmt"
 	"net/http"
