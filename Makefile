@@ -1,6 +1,6 @@
 # initialize
 init:
-	cp compose.override.yml.sample compose.override.yml
+	cp compose.override.yaml.sample compose.override.yaml
 up:
 	docker compose up -d --build
 down:
