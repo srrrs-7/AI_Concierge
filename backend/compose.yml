@@ -1,5 +1,0 @@
-version: "3"
-
-services:
-  plant-uml:
-    image: plantuml/plantuml-server

@@ -1,0 +1,72 @@
+version: "3"
+services:
+  # UI
+  ui:
+    build:
+      context: ./ui
+      dockerfile: image-ui.Dockerfile
+    volumes:
+      - ./ui:/app
+  #storybook
+  storybook:
+    build:
+      context: ./ui
+      dockerfile: image-sb.Dockerfile
+    volumes:
+      - ./ui:/app
+
+  # Auth
+  auth-api:
+    build:
+      context: ./ms/auth/src
+      dockerfile: image-auth.Dockerfile
+    volumes:
+      - ./ms/auth/src:/go/src
+      - ./ms/auth/bin:/go/bin
+      - ./ms/auth/csv:/go/csv
+      - ./ms/auth/log:/go/log
+    networks:
+      - aic-network
+  auth-db:
+    image: mysql:latest
+    networks:
+      - aic-network
+  auth-cache:
+    image: redis:latest
+    networks:
+      - aic-network
+
+  # PlantUML
+  plant-uml:
+    image: plantuml/plantuml-server
+
+  # Dev
+  localstack:
+    container_name: localstack
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - aic-network
+
+  aws:
+    container_name: aws
+    image: amazon/aws-cli
+    environment:
+      AWS_ACCESS_KEY_ID: foo
+      AWS_SECRET_ACCESS_KEY: foo
+      AWS_DEFAULT_REGION: ap-northeast-1
+      NO_PROXY: 169.254.169.254
+    networks:
+      - aic-network
+
+networks:
+  aic-network:
+    driver: bridge
