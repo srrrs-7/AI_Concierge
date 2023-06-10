@@ -1,4 +1,5 @@
 compose.override.yml
 csv
 bin
+log
 volume

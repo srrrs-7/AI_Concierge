@@ -25,6 +25,9 @@ services:
       - ./ms/auth/bin:/go/bin
       - ./ms/auth/csv:/go/csv
       - ./ms/auth/log:/go/log
+    depends_on:
+      - auth-db
+      - auth-cache
     networks:
       - aic-network
   auth-db:
@@ -39,6 +42,8 @@ services:
   # PlantUML
   plant-uml:
     image: plantuml/plantuml-server
+    ports:
+      - 8080:8080
 
   # Dev
   localstack:
@@ -56,6 +61,7 @@ services:
     networks:
       - aic-network
 
+  # AWS CLI
   aws:
     container_name: aws
     image: amazon/aws-cli

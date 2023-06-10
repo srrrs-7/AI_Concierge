@@ -30,8 +30,6 @@ db_url=mysql://root:secret@tcp(auth_db:3306)/aic
 
 auth:
 	docker compose up auth-api auth-db auth-cache localstack aws -d --build
-auth-recreate:
-	docker compose recreate auth-api
 auth-build:
 	docker compose run --rm auth-api go build -o /go/bin/auth.exe ./cmd
 auth-exec:
@@ -39,8 +37,8 @@ auth-exec:
 auth-test:
 	docker compose run --rm auth-api go test -cover ./... -coverprofile=/go/log/cover.out
 auth-coverage:
-	docker compose run --rm ayth-api go tool cover -html=/go/log/cover.out -o /go/log/cover.html
-	open /go/log/cover.html
+	docker compose run --rm auth-api go tool cover -html=/go/log/cover.out -o /go/log/cover.html
+	open ./ms/auth/log/cover.html
 auth-fmt:
 	docker compose run --name=auth --rm auth-api go fmt ./...
 auth-sqlc:
@@ -53,4 +51,10 @@ auht-migrate-down:
 	docker compose run --name=auth --rm auth-api migrate -path _migration -database "$(db_url)" down
 auht-bucket:
 	docker compose run --name=auth --rm aws s3 mb s3://aic --endpoint-url=http://localstack:4566
-.PHONY: auth auth-start auth-build auth-exec auth-fmt auth-sqlc auth-migrate-file auth-migrate-up auth-migrate-down auht-bucket
+.PHONY: auth auth-build auth-exec auth-test auth-coverage auth-fmt auth-sqlc auht-migrate-file auht-migrate-up auht-migrate-down
+
+
+# PlantUML
+uml:
+	docker compose up plant-uml -d --build
+.PHONY: uml
