@@ -1,0 +1,15 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "indentation": "tab",
+    "color-no-invalid-hex": true,
+    "declaration-colon-space-after": [
+      "always",
+      {
+        "ignore": ["inside-function"]
+      }
+    ],
+    "declaration-block-trailing-semicolon": "always",
+    "selector-pseudo-element-colon-notation": "double"
+  }
+}

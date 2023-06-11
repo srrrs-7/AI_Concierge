@@ -9,8 +9,13 @@ down:
 
 
 # UI
-ui:
-	docker compose up ui storybook -d --build
+ui: ui-init ui-start
+ui-start:
+	docker compose up ui storybook -d
+ui-init:
+	docker compose build ui storybook
+	docker compose run --rm ui npm i
+	docker compose run --rm storybook npm i
 ui-sb-test:
 	docker compose run --rm storybook npx playwright install
 	docker compose run --rm storybook npm run test-storybook
