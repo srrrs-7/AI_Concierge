@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Atom_Button from '../atoms/Button.svelte';
+  import Atom_Button from '@atoms/Button.svelte';
 
   function fetchData() {
     console.log('fetching data');
