@@ -40,19 +40,48 @@ auth-coverage:
 	docker compose run --rm auth-api go tool cover -html=/go/log/cover.out -o /go/log/cover.html
 	open ./ms/auth/log/cover.html
 auth-fmt:
-	docker compose run --name=auth --rm auth-api go fmt ./...
+	docker compose run --rm auth-api go fmt ./...
 auth-sqlc:
-	docker compose run --name=auth --rm auth-api sqlc generate
-auht-migrate-file:
-	docker compose run --name=auth --rm auth-api migrate create -ext sql -dir _migration migrate
-auht-migrate-up:
-	docker compose run --name=auth --rm auth-api migrate -path _migration -database "$(db_url)" up
-auht-migrate-down:
-	docker compose run --name=auth --rm auth-api migrate -path _migration -database "$(db_url)" down
-auht-bucket:
-	docker compose run --name=auth --rm aws s3 mb s3://aic --endpoint-url=http://localstack:4566
-.PHONY: auth auth-build auth-exec auth-test auth-coverage auth-fmt auth-sqlc auht-migrate-file auht-migrate-up auht-migrate-down
+	docker compose run --rm auth-api sqlc generate
+auth-migrate-file:
+	docker compose run --rm auth-api migrate create -ext sql -dir _migration migrate
+auth-migrate-up:
+	docker compose run --rm auth-api migrate -path _migration -database "$(db_url)" up
+auth-migrate-down:
+	docker compose run --rm auth-api migrate -path _migration -database "$(db_url)" down
+.PHONY: auth auth-build auth-exec auth-test auth-coverage auth-fmt auth-sqlc auth-migrate-file auth-migrate-up auth-migrate-down
 
+
+# localstack
+localstack_URL = http://localstack:4566
+
+localstack:
+	localstack status services
+.PHONY: localstack
+
+# S3
+bucket="aic"
+file="README.md"
+
+bucket:
+	docker compose run --rm aws s3 mb s3://$(bucket) --endpoint-url=$(localstack_URL)
+upload:
+	docker compose run --rm aws s3 cp $(file) s3://my-bucket/$(bucket)
+download:
+	docker compose run --rm aws s3 cp s3://$(bucket)/$(file) ./
+.PHONY: bucket upload download
+
+# SQS
+queue_URL = http://localstack:4566/000000000000/aic
+message="Hi!! SQS!"
+
+sqs:
+	docker compose run --rm aws sqs create-queue --queue-name aic --endpoint-url=$(localstack_URL)
+send:
+	docker compose run --rm aws sqs send-message --queue-url=$(queue_URL) --message-body=$(message) --endpoint-url=$(localstack_URL)
+receive:
+	docker compose run --rm aws sqs receive-message --queue-url=$(queue_URL) --endpoint-url=$(localstack_URL)
+.PHONY: sqs sqs-send sqs-receive
 
 # PlantUML
 uml:
