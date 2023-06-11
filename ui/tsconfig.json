@@ -1,11 +1,18 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"]
+    },
     "strict": true,
     "module": "es6",
     "target": "es2018",
     "outDir": "dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   },
   "include": ["src"]
 }
