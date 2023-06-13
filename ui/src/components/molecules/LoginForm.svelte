@@ -1,6 +1,6 @@
 <script>
-  let username = '';
-  let password = '';
+  export let username = '';
+  export let password = '';
 
   function handleSubmit() {
     const authHeader = 'Basic ' + btoa(`${username}:${password}`);

@@ -3,10 +3,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@public/*": ["public/*"],
+      "@api/*": ["src/api/*"],
       "@atoms/*": ["src/components/atoms/*"],
       "@molecules/*": ["src/components/molecules/*"],
       "@components/*": ["src/components/*"],
-      "@layouts/*": ["src/layouts/*"]
+      "@layouts/*": ["src/layouts/*"],
+      "@store/*": ["src/store/*"],
+      "@util/*": ["src/util/*"],
+      "@validate/*": ["src/validate/*"]
     },
     "strict": true,
     "module": "es6",

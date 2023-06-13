@@ -17,7 +17,7 @@ export async function postBasicAuth(url: string, body: BasicAuth) {
   });
 
   const json = await res.json();
-  result = JSON.stringify(json);
+  const result = JSON.stringify(json);
 
   return result;
 }

@@ -3,23 +3,26 @@ services:
   # UI
   ui:
     build:
-      context: ./ui
-      dockerfile: image-ui.Dockerfile
+      context: ./.images
+      dockerfile: ui.Dockerfile
+    command: sh -c "npm i && npm run start"
     volumes:
       - ./ui:/app
   #storybook
   storybook:
     build:
-      context: ./ui
-      dockerfile: image-sb.Dockerfile
+      context: ./.images
+      dockerfile: storybook.Dockerfile
+    command: sh -c "npm i && npm run storybook"
     volumes:
       - ./ui:/app
 
   # Auth
   auth-api:
     build:
-      context: ./ms/auth/src
-      dockerfile: image-auth.Dockerfile
+      context: ./.images
+      dockerfile: auth.Dockerfile
+    command: sh -c "go mod download && go run ./cmd"
     volumes:
       - ./ms/auth/src:/go/src
       - ./ms/auth/bin:/go/bin
@@ -39,11 +42,117 @@ services:
     networks:
       - aic-network
 
+  # blog
+  blog-api:
+    build:
+      context: ./.images
+      dockerfile: blog.Dockerfile
+    command: sh -c "cargo build && cargo run"
+    volumes:
+      - ./ms/blog/src:/go/src
+      - ./ms/blog/bin:/go/bin
+      - ./ms/blog/csv:/go/csv
+      - ./ms/blog/log:/go/log
+    depends_on:
+      - blog-db
+      - blog-cache
+    networks:
+      - aic-network
+  blog-db:
+    image: mysql:latest
+    networks:
+      - aic-network
+  blog-cache:
+    image: redis:latest
+    networks:
+      - aic-network
+
+  # calendar
+  calendar-api:
+    build:
+      context: ./.images
+      dockerfile: calendar.Dockerfile
+    command: sh -c "go mod download && go run ./cmd"
+    volumes:
+      - ./ms/calendar/src:/go/src
+      - ./ms/calendar/bin:/go/bin
+      - ./ms/calendar/csv:/go/csv
+      - ./ms/calendar/log:/go/log
+    depends_on:
+      - calendar-db
+      - calendar-cache
+    networks:
+      - aic-network
+  calendar-db:
+    image: mysql:latest
+    networks:
+      - aic-network
+  calendar-cache:
+    image: redis:latest
+    networks:
+      - aic-network
+
+  # search
+  search-api:
+    build:
+      context: ./.images
+      dockerfile: search.Dockerfile
+    command: sh -c "go mod download && go run ./cmd"
+    volumes:
+      - ./ms/search/src:/go/src
+      - ./ms/search/bin:/go/bin
+      - ./ms/search/csv:/go/csv
+      - ./ms/search/log:/go/log
+    depends_on:
+      - search-db
+      - search-cache
+    networks:
+      - aic-network
+  search-db:
+    image: mysql:latest
+    networks:
+      - aic-network
+  search-cache:
+    image: redis:latest
+    networks:
+      - aic-network
+
+  # task
+  task-api:
+    build:
+      context: ./.images
+      dockerfile: task.Dockerfile
+    command: sh -c "cargo build && cargo run"
+    volumes:
+      - ./ms/task/src:/go/src
+      - ./ms/task/bin:/go/bin
+      - ./ms/task/csv:/go/csv
+      - ./ms/task/log:/go/log
+    depends_on:
+      - task-db
+      - task-cache
+    networks:
+      - aic-network
+  task-db:
+    image: mysql:latest
+    networks:
+      - aic-network
+  task-cache:
+    image: redis:latest
+    networks:
+      - aic-network
+
   # PlantUML
   plant-uml:
     image: plantuml/plantuml-server
     ports:
       - 8080:8080
+
+  # Redoc
+  redoc:
+    image: redocly/redoc
+    ports:
+      - 8088:80
 
   # Dev
   localstack:
@@ -60,7 +169,6 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - aic-network
-
   # AWS CLI
   aws:
     container_name: aws

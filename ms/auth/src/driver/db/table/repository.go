@@ -4,24 +4,22 @@ import (
 	"auth/pkg/entity"
 	"auth/util/env"
 	"context"
-	"database/sql"
+
+	"gorm.io/gorm"
 )
 
 type Repository struct {
-	env     *env.EnvParams[string]
-	db      *sql.DB
-	queries *Queries
+	env *env.EnvParams[string]
+	db  *gorm.DB
 }
 
 func NewRepository(
 	env *env.EnvParams[string],
-	db *sql.DB,
-	queries *Queries,
+	db *gorm.DB,
 ) *Repository {
 	return &Repository{
-		env:     env,
-		db:      db,
-		queries: queries,
+		env: env,
+		db:  db,
 	}
 }
 

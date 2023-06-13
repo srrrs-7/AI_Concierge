@@ -5,20 +5,13 @@ up:
 	docker compose up -d --build
 down:
 	docker compose down
-.PHONY:init up down
-
+.PHONY: init up down
 
 # UI
-ui: ui-init ui-start
-ui-start:
-	docker compose up ui storybook -d
-ui-init:
-	docker compose build ui storybook
-	docker compose run --rm ui npm i
-	docker compose run --rm storybook npm i
+ui:
+	docker compose up ui storybook -d --build
 ui-sb-test:
-	docker compose run --rm storybook npx playwright install
-	docker compose run --rm storybook npm run test-storybook
+	npm run test-storybook
 ui-fmt:
 	docker compose run --rm ui npx prettier --write ./src
 ui-lint:
@@ -29,9 +22,8 @@ ui-build:
 	docker compose run --rm ui npm run build
 .PHONY: ui ui-dev ui-sb ui-sb-test ui-fmt ui-lint ui-test ui-build
 
-
 # Auth
-db_url=mysql://root:secret@tcp(auth_db:3306)/aic
+db_url="mysql://root:secret@tcp(auth-db:3306)/aic"
 
 auth:
 	docker compose up auth-api auth-db auth-cache localstack aws -d --build
@@ -46,19 +38,16 @@ auth-coverage:
 	open ./ms/auth/log/cover.html
 auth-fmt:
 	docker compose run --rm auth-api go fmt ./...
-auth-sqlc:
-	docker compose run --rm auth-api sqlc generate
 auth-migrate-file:
 	docker compose run --rm auth-api migrate create -ext sql -dir _migration migrate
 auth-migrate-up:
-	docker compose run --rm auth-api migrate -path _migration -database "$(db_url)" up
+	docker compose run --rm auth-api migrate -path _migration -database $(db_url) up
 auth-migrate-down:
-	docker compose run --rm auth-api migrate -path _migration -database "$(db_url)" down
+	docker compose run --rm auth-api migrate -path _migration -database $(db_url) down
 .PHONY: auth auth-build auth-exec auth-test auth-coverage auth-fmt auth-sqlc auth-migrate-file auth-migrate-up auth-migrate-down
 
-
 # localstack
-localstack_URL = http://localstack:4566
+localstack_URL="http://localstack:4566"
 
 localstack:
 	localstack status services
@@ -77,7 +66,7 @@ download:
 .PHONY: bucket upload download
 
 # SQS
-queue_URL = http://localstack:4566/000000000000/aic
+queue_URL = "http://localstack:4566/000000000000/aic"
 message="Hi!! SQS!"
 
 sqs:
@@ -92,3 +81,8 @@ receive:
 uml:
 	docker compose up plant-uml -d --build
 .PHONY: uml
+
+# Redoc
+redoc:
+	docker compose up redoc -d --build
+.PHONY: redoc

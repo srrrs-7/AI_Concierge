@@ -17,7 +17,7 @@ services:
       - "8880:8880"
     environment:
       - DB_DRIVER=mysql
-      - DB_ADDR="root:secret@/aic"
+      - DB_ADDR="user:password@tcp(auth-db:3306)/aic?charset=utf8mb4&parseTime=True&loc=Local"
       - API_PORT=8880
       - REDIS_URL=auth-cache:6379
       - AWS_REGION=ap-northeast-1

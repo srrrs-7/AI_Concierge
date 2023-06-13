@@ -25,15 +25,15 @@ type Env[T Value] struct {
 	Value T
 }
 
+func (e Env[T]) Output() string {
+	return fmt.Sprintf("%s=%s", e.Name, e.Value)
+}
+
 func newEnv[T Value](name string) Env[T] {
 	return Env[T]{
 		Name:  name,
 		Value: T(os.Getenv(name)),
 	}
-}
-
-func (e Env[T]) Output() string {
-	return fmt.Sprintf("%s=%s", e.Name, e.Value)
 }
 
 func SetEnv[T Value]() *EnvParams[T] {

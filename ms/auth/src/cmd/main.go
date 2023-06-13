@@ -41,12 +41,11 @@ func main() {
 		Token:   "",
 	})
 	// DB connection
-	db, err := db.NewDb(env)
+	gormDb, err := db.NewDb(env)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
-	queries := table.New(db)
+	defer db.CloseDb(gormDb)
 
 	// redis client
 	rds, err := cache.NewRedis(env)
@@ -59,7 +58,7 @@ func main() {
 	s3 := file.NewS3(env, sess)
 	// repository
 	client := domain.NewRepository(env, cli)
-	store := table.NewRepository(env, db, queries)
+	store := table.NewRepository(env, gormDb)
 	rdsRepo := redis.NewRepository(env, rds)
 	sqsRepo := awsSqs.NewRepository(env, sqs)
 	s3Repo := awsS3.NewRepository(env, s3)
