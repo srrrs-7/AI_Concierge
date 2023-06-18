@@ -1,9 +1,16 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
+    "strict": true,
+    "module": "es6",
+    "target": "es2022",
+    "outDir": "dist",
+    "sourceMap": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "baseUrl": ".",
     "paths": {
-      "@public/*": ["public/*"],
+      "@i18n/*": ["src/_i18next/*"],
       "@api/*": ["src/api/*"],
       "@atoms/*": ["src/components/atoms/*"],
       "@molecules/*": ["src/components/molecules/*"],
@@ -12,14 +19,7 @@
       "@store/*": ["src/store/*"],
       "@util/*": ["src/util/*"],
       "@validate/*": ["src/validate/*"]
-    },
-    "strict": true,
-    "module": "es6",
-    "target": "es2018",
-    "outDir": "dist",
-    "sourceMap": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    }
   },
   "include": ["src"]
 }

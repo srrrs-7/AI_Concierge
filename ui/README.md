@@ -9,7 +9,8 @@
 - Prettier(formatter) <https://docs.astro.build/ja/editor-setup/>
 - Eslint(linter) <https://eslint.org/docs/latest/use/getting-started>
 - Vitest (test library) <https://vitest.dev/>
-- i18next + svelte <>
+- i18next + svelte <https://github.com/NishuGoel/svelte-i18next>
+- moment <https://momentjs.com/>
 
 ## 環境構築
 

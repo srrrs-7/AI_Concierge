@@ -1,8 +1,12 @@
 ---
 import Header from '@layouts/Header.svelte';
 import Translate from '@layouts/Translate.svelte';
+import Atom_Timer from '@components/atoms/Timer.svelte';
+import Atom_Pull from '@components/atoms/Pull.svelte';
 
-console.log('server');
+// pull down props
+let contents: string[] = ["svelte", "react", "vue"];
+
 ---
 
 <html lang="en">
@@ -15,7 +19,10 @@ console.log('server');
 
   <body>
     <Header client:load />
-    <a href="/login">Login</a>
     <Translate client:load />
+    <Atom_Timer client:load />
+    <Atom_Pull client:load contents={contents} />
+
+    <a href="/login">Login</a>
   </body>
 </html>

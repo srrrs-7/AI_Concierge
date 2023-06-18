@@ -21,6 +21,7 @@
     "@types/react-dom": "^18.2.4",
     "astro": "^2.6.3",
     "i18next": "^22.5.1",
+    "moment": "^2.29.4",
     "playwright": "^1.35.0",
     "stylelint": "^15.7.0",
     "svelte": "^3.59.1",

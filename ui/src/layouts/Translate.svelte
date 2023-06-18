@@ -1,5 +1,5 @@
 <script>
-  import { t, locale, locales } from '@public/i18next/i18n';
+  import { t, locale, locales } from '@i18n/i18n';
 
   // Create a locale specific timestamp
   $: time = new Date().toLocaleDateString($locale, {

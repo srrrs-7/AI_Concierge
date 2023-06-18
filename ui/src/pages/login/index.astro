@@ -1,5 +1,6 @@
 ---
-import LoginForm from '@components/molecules/LoginForm.svelte';
+import Mole_LoginForm from '@components/molecules/LoginForm.svelte';
+import Atom_Pull from '@components/atoms/Pull.svelte';
 ---
 
 <html>
@@ -13,10 +14,7 @@ import LoginForm from '@components/molecules/LoginForm.svelte';
   <body>
     <div>
       <h1>Login</h1>
-      <p>ID</p>
-      <p>Password</p>
+      <Mole_LoginForm client:load username="user" password="pass" />
     </div>
-
-    <LoginForm client:load username="user" password="pass" />
   </body>
 </html>

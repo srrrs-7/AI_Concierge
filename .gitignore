@@ -1,4 +1,4 @@
-compose.override.yaml.sample
+compose.override.yaml
 go.work.sum
 .vscode
 volume
