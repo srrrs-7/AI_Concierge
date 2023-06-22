@@ -20,7 +20,7 @@
     <ul class="options">
       {#each contents as content}
         <li on:click={() => selectOption(content)} on:keydown={toggleDropdown}>
-      {content}
+          {content}
         </li>
       {/each}
     </ul>

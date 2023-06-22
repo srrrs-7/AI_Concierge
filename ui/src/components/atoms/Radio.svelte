@@ -1,8 +1,14 @@
 <script lang="ts">
-  export let btnName: string;
+  export let label: string = 'label';
 </script>
 
 <div>
+  <label for="radio"> {label} </label>
   <input type="radio" id="radio" checked />
-  <label for="radio"> {btnName} </label>
 </div>
+
+<style>
+  div {
+    margin: 20px;
+  }
+</style>
