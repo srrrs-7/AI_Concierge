@@ -34,32 +34,21 @@ func (r *Repository) NewRouter() {
 	router := chi.NewRouter()
 	router.Use(log.NewLogging)
 
-	// health
 	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	// register
-	router.Route("/register", func(c chi.Router) {
-		c.Post("/", r.logicRepo.Auth)
-	})
-
-	// OpenID connect
-	router.Route("/oidc", func(c chi.Router) {
-		c.Use(r.basicAuth)
-		c.Get("/token", r.logicRepo.Oidc) // ID tokenの作成
-	})
-
-	// OAuth
-	router.Route("/oauth/token", func(c chi.Router) {
-		c.Get("/create", r.logicRepo.Token) // 認可サーバーでトークン発行
+	router.Route("/oauth", func(c chi.Router) {
+		c.Get("/authorize", r.logicRepo.Auth)
+		c.Get("/callback", r.logicRepo.Auth)
+		c.Post("/token", r.logicRepo.Auth)
+		c.Get("/authenticate", r.logicRepo.Auth)
 	})
 
 	r.logger.Info(fmt.Sprintf("start server on port: %s", r.env.API_PORT.Value))
-	fmt.Println("start server on port: " + r.env.API_PORT.Value)
 	err := http.ListenAndServe(":"+r.env.API_PORT.Value, router)
 	if err != nil {
-		panic(err)
+		r.logger.Error(err)
 	}
 }
 

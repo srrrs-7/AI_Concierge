@@ -21,7 +21,6 @@ import (
 	"auth/util/env"
 	utilLog "auth/util/log"
 	"flag"
-	"log"
 )
 
 func init() {
@@ -29,8 +28,10 @@ func init() {
 }
 
 func main() {
+	logger := utilLog.NewRepository()
+
 	env := env.SetEnv[string]()
-	log.Println(env)
+	logger.Info(env)
 
 	// api client
 	cli := api.NewClient(&api.Auth{
@@ -43,14 +44,14 @@ func main() {
 	// DB connection
 	gormDb, err := db.NewDb(env)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error(err)
 	}
 	defer db.CloseDb(gormDb)
 
 	// redis client
 	rds, err := cache.NewRedis(env)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error(err)
 	}
 	// aws session
 	sess := aws.NewAwsSession(env)
@@ -67,7 +68,6 @@ func main() {
 	oauthService := oauth.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
 	oidcService := oidc.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
 	tokenService := token.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
-
 	// logic
 	logicRepo := pkg.NewRepository(
 		env,
@@ -76,8 +76,6 @@ func main() {
 		*oauthService,
 		*tokenService,
 	)
-
-	logger := utilLog.NewRepository()
 	// new router
 	router := driver.NewRouter(env, logger, logicRepo)
 	router.NewRouter()

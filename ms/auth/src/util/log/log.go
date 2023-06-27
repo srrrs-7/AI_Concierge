@@ -21,10 +21,14 @@ func (l *Repository) Info(msg any) {
 	log.Println(msg)
 }
 
+func (l *Repository) Error(msg any) {
+	log.Fatal(msg)
+}
+
 func NewLogging(next http.Handler) http.Handler {
 	file, err := os.OpenFile("../log/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
-		log.Fatal("ログファイルの作成に失敗しました:", err)
+		log.Fatal("failed to create log file:", err)
 	}
 	defer file.Close()
 
