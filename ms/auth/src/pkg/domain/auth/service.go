@@ -1,26 +1,24 @@
 package auth
 
 import (
+	"auth/pkg/domain/auth/entity"
 	"auth/util/env"
-	"crypto/sha256"
 	"encoding/base64"
-	"encoding/hex"
-	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 )
 
-type Service struct {
-	env   *env.EnvParams[string]
-	store DbUseCase
-	redis RdsUseCase
+type UseCase interface {
 }
 
-func NewService(
-	env *env.EnvParams[string],
-	store DbUseCase,
-	redis RdsUseCase,
-) *Service {
+type Service struct {
+	env   *env.EnvParams[string]
+	store DbRepository
+	redis RdsRepository
+}
+
+func New(env *env.EnvParams[string], store DbRepository, redis RdsRepository) *Service {
 	return &Service{
 		env:   env,
 		store: store,
@@ -28,36 +26,52 @@ func NewService(
 	}
 }
 
-func (s *Service) BasicAuth(r *http.Request) (id, password string, err error) {
+func (s *Service) Auth(req *http.Request) error {
+	ctx := req.Context()
+	auth, err := s.store.FindByID(ctx)
+	if err != nil {
+		return err
+	}
+	entity := entity.New(auth).Hash()
+	if entity.ValidEmail() {
+		return nil
+	}
 
-	authHeader := r.Header.Get("Authorization")
+	id, password := basicAuth(req)
+	if auth.UserID != id {
+		return fmt.Errorf("basic auth id invalid: %s", id)
+	} else if auth.Password != password {
+		return fmt.Errorf("basic auth password invalid: %s", password)
+	}
+
+	return nil
+}
+
+func basicAuth(req *http.Request) (id string, password string) {
+	authHeader := req.Header.Get("Authorization")
 	if authHeader == "" {
-		return "", "", errors.New("missing authorization header")
+		return id, password
 	}
 
 	auth := strings.SplitN(authHeader, " ", 2)
 	if len(auth) != 2 || auth[0] != "Basic" {
-		return "", "", errors.New("invalid authorization header")
+		return id, password
 	}
 
 	decoded, err := base64.StdEncoding.DecodeString(auth[1])
 	if err != nil {
-		return "", "", errors.New("invalid authorization header")
+		return id, password
 	}
 
 	credentials := strings.SplitN(string(decoded), ":", 2)
 	if len(credentials) != 2 {
-		return "", "", errors.New("invalid authorization header")
+		return id, password
 	}
+	id, password = credentials[0], credentials[0]
 
-	return credentials[0], credentials[1], nil
+	return
 }
 
-func (s *Service) Hash(id, password string) (string, string) {
-
-	hash := sha256.Sum256([]byte(password))
-	hashString := hex.EncodeToString(hash[:])
-
-	return id, hashString
+func (s *Service) Valid() {
 
 }

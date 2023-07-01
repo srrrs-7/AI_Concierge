@@ -27,11 +27,11 @@ func Test_GetDomain(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rds, err := cache.NewRedis(&env.EnvParams[string]{})
+			rds, err := cache.New(&env.EnvParams[string]{})
 			if err != nil {
 				log.Fatal(err)
 			}
-			got := NewRepository(&env.EnvParams[string]{}, rds)
+			got := New(&env.EnvParams[string]{}, rds)
 
 			if diff := cmp.Diff(got, tt.want); diff != "" {
 				t.Errorf("GetDomain() = %v", diff)

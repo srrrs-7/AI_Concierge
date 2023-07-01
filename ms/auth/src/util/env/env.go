@@ -36,7 +36,7 @@ func newEnv[T Value](name string) Env[T] {
 	}
 }
 
-func SetEnv[T Value]() *EnvParams[T] {
+func New[T Value]() *EnvParams[T] {
 	return &EnvParams[T]{
 		DB_DRIVER:     newEnv[T]("DB_DRIVER"),
 		DB_ADDR:       newEnv[T]("DB_ADDR"),

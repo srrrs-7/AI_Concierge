@@ -12,10 +12,7 @@ type Repository struct {
 	client *sqs.SQS
 }
 
-func NewRepository(
-	env *env.EnvParams[string],
-	client *sqs.SQS,
-) *Repository {
+func New(env *env.EnvParams[string], client *sqs.SQS) *Repository {
 	return &Repository{
 		env:    env,
 		client: client,

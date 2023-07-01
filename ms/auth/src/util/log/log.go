@@ -7,13 +7,13 @@ import (
 )
 
 var (
-	std  = NewRepository()
+	std  = New()
 	Info = std.Info
 )
 
 type Repository struct{}
 
-func NewRepository() *Repository {
+func New() *Repository {
 	return &Repository{}
 }
 

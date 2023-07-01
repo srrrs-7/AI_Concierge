@@ -8,7 +8,10 @@ down:
 .PHONY: init up down
 
 # UI
-ui:
+ui: npm-install ui-start
+npm-install:
+	docker compose run --rm ui npm install
+ui-start:
 	docker compose up ui storybook -d --build
 ui-sb-test:
 	npm run test-storybook

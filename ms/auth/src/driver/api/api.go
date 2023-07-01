@@ -25,6 +25,7 @@ type BaseUrl = string
 type ID = string
 type Secret = string
 type Token = string
+
 type Auth struct {
 	AuthUrl BaseUrl
 	Url     BaseUrl
@@ -44,12 +45,13 @@ type Method = string
 type Path = string
 type Query = url.Values
 type Body = io.Reader
+
 type fetch struct {
 	token  Token
 	apiUrl url.URL
 }
 
-func NewClient(auth *Auth) client {
+func New(auth *Auth) *client {
 	authUrl, err := url.Parse(string(auth.AuthUrl))
 	if err != nil {
 		log.Fatal(err)
@@ -60,7 +62,7 @@ func NewClient(auth *Auth) client {
 		log.Fatal(err)
 	}
 
-	return client{
+	return &client{
 		authUrl: *authUrl,
 		apiUrl:  *apiUrl,
 		id:      auth.ID,
@@ -115,13 +117,7 @@ func (c client) Fetch(ctx context.Context) (Fetch, error) {
 }
 
 // fetch api execution
-func (f fetch) Do(
-	ctx context.Context,
-	method Method,
-	path Path,
-	query Query,
-	body Body,
-) (*http.Response, error) {
+func (f fetch) Do(ctx context.Context, method Method, path Path, query Query, body Body) (*http.Response, error) {
 	url := f.apiUrl
 	url.Path = path
 	url.RawQuery = query.Encode()

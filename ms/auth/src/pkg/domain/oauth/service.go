@@ -7,22 +7,25 @@ import (
 	"net/url"
 )
 
-type Service struct {
-	env    *env.EnvParams[string]
-	client ApiUseCase
-	store  DbUseCase
-	redis  RdsUseCase
-	sqs    SqsUseCase
-	s3     S3UseCase
+type UseCase interface {
 }
 
-func NewService(
+type Service struct {
+	env    *env.EnvParams[string]
+	client ApiRepository
+	store  DbRepository
+	redis  RdsRepository
+	sqs    SqsRepository
+	s3     S3Repository
+}
+
+func New(
 	env *env.EnvParams[string],
-	client ApiUseCase,
-	store DbUseCase,
-	redis RdsUseCase,
-	sqs SqsUseCase,
-	s3 S3UseCase,
+	client ApiRepository,
+	store DbRepository,
+	redis RdsRepository,
+	sqs SqsRepository,
+	s3 S3Repository,
 ) *Service {
 	return &Service{
 		env:    env,
@@ -34,6 +37,6 @@ func NewService(
 	}
 }
 
-func (s Service) Get(ctx context.Context, path string, query url.Values) ([]*entity.Entity, error) {
+func (s Service) Get(ctx context.Context, path string, query url.Values) ([]*entity.Auth, error) {
 	return nil, nil
 }

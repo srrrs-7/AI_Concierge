@@ -12,7 +12,7 @@ type Repository struct {
 	redis rueidis.Client
 }
 
-func NewRepository(env *env.EnvParams[string], redis rueidis.Client) *Repository {
+func New(env *env.EnvParams[string], redis rueidis.Client) *Repository {
 	return &Repository{
 		env:   env,
 		redis: redis,

@@ -13,7 +13,7 @@ type Repository struct {
 	client api.Client
 }
 
-func NewRepository(
+func New(
 	env *env.EnvParams[string],
 	client api.Client,
 ) *Repository {

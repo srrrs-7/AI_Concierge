@@ -1,21 +1,20 @@
 package main
 
 import (
-	"auth/driver"
 	"auth/driver/api"
 	"auth/driver/api/domain"
 	"auth/driver/cache"
 	"auth/driver/cache/redis"
 	"auth/driver/db"
-	"auth/driver/db/table"
+	authDriver "auth/driver/db/auth"
 	"auth/driver/file"
 	awsS3 "auth/driver/file/s3"
 	"auth/driver/queue"
 	awsSqs "auth/driver/queue/sqs"
+	"auth/handle"
 	"auth/pkg"
 	"auth/pkg/domain/auth"
 	"auth/pkg/domain/oauth"
-	"auth/pkg/domain/oidc"
 	"auth/pkg/domain/token"
 	"auth/util/aws"
 	"auth/util/env"
@@ -28,13 +27,13 @@ func init() {
 }
 
 func main() {
-	logger := utilLog.NewRepository()
+	logger := utilLog.New()
 
-	env := env.SetEnv[string]()
+	env := env.New[string]()
 	logger.Info(env)
 
 	// api client
-	cli := api.NewClient(&api.Auth{
+	cli := api.New(&api.Auth{
 		AuthUrl: "",
 		Url:     "",
 		ID:      "",
@@ -42,41 +41,38 @@ func main() {
 		Token:   "",
 	})
 	// DB connection
-	gormDb, err := db.NewDb(env)
+	gormDb, err := db.New(env)
 	if err != nil {
 		logger.Error(err)
 	}
 	defer db.CloseDb(gormDb)
 
 	// redis client
-	rds, err := cache.NewRedis(env)
+	rds, err := cache.New(env)
 	if err != nil {
 		logger.Error(err)
 	}
 	// aws session
-	sess := aws.NewAwsSession(env)
-	sqs := queue.NewSqs(env, sess)
-	s3 := file.NewS3(env, sess)
+	sess := aws.New(env)
+	sqs := queue.New(env, sess)
+	s3 := file.New(env, sess)
 	// repository
-	client := domain.NewRepository(env, cli)
-	store := table.NewRepository(env, gormDb)
-	rdsRepo := redis.NewRepository(env, rds)
-	sqsRepo := awsSqs.NewRepository(env, sqs)
-	s3Repo := awsS3.NewRepository(env, s3)
+	client := domain.New(env, cli)
+	rdsRepo := redis.New(env, rds)
+	sqsRepo := awsSqs.New(env, sqs)
+	s3Repo := awsS3.New(env, s3)
+	authRepo := authDriver.New(gormDb)
 	// service
-	authService := auth.NewService(env, store, rdsRepo)
-	oauthService := oauth.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
-	oidcService := oidc.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
-	tokenService := token.NewService(env, client, store, rdsRepo, sqsRepo, s3Repo)
+	authService := auth.New(env, authRepo, rdsRepo)
+	oauthService := oauth.New(env, client, authRepo, rdsRepo, sqsRepo, s3Repo)
+	tokenService := token.New(env, client, authRepo, rdsRepo, sqsRepo, s3Repo)
 	// logic
-	logicRepo := pkg.NewRepository(
-		env,
+	logicRepo := pkg.New(
 		*authService,
-		*oidcService,
 		*oauthService,
 		*tokenService,
 	)
 	// new router
-	router := driver.NewRouter(env, logger, logicRepo)
-	router.NewRouter()
+	router := handle.New(env, logger, logicRepo)
+	router.Start()
 }

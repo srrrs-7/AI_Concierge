@@ -12,7 +12,7 @@ type Repository struct {
 	client *s3.S3
 }
 
-func NewRepository(
+func New(
 	env *env.EnvParams[string],
 	client *s3.S3,
 ) *Repository {

@@ -7,6 +7,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func NewS3(env *env.EnvParams[string], sess *session.Session) *s3.S3 {
+func New(env *env.EnvParams[string], sess *session.Session) *s3.S3 {
 	return s3.New(sess)
 }

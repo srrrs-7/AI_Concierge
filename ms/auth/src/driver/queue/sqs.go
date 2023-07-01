@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 )
 
-func NewSqs(env *env.EnvParams[string], sess *session.Session) *sqs.SQS {
+func New(env *env.EnvParams[string], sess *session.Session) *sqs.SQS {
 	svc := sqs.New(sess)
 	return svc
 }

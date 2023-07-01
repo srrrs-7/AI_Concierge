@@ -6,3 +6,7 @@ type Auth struct {
 	Email    string `gorm:"column:email" json:"email"`
 	Scope    string `gorm:"column:scope" json:"scope"`
 }
+
+func (a *Auth) TableName() string {
+	return "auth"
+}

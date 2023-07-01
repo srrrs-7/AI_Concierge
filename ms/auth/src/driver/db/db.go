@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewDb(env *env.EnvParams[string]) (*gorm.DB, error) {
+func New(env *env.EnvParams[string]) (*gorm.DB, error) {
 	dsn := env.DB_ADDR.Value
 	gormDb, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

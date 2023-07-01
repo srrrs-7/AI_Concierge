@@ -10,7 +10,7 @@ type InputParams struct {
 	dbDriver string
 }
 
-func NewInput() *InputParams {
+func New() *InputParams {
 	flag.StringVar(&dbDriver, "mysql", "mysql", "mysql or postgres")
 
 	flag.Parse()
