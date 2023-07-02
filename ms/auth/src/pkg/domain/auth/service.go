@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"auth/driver/db/auth"
 	"auth/pkg/domain/auth/entity"
 	"auth/util/env"
 	"encoding/base64"
@@ -14,19 +15,17 @@ type UseCase interface {
 
 type Service struct {
 	env   *env.EnvParams[string]
-	store DbRepository
-	redis RdsRepository
+	store auth.DbRepository
 }
 
-func New(env *env.EnvParams[string], store DbRepository, redis RdsRepository) *Service {
+func New(env *env.EnvParams[string], store auth.DbRepository) *Service {
 	return &Service{
 		env:   env,
 		store: store,
-		redis: redis,
 	}
 }
 
-func (s *Service) Auth(req *http.Request) error {
+func (s *Service) BasicAuth(req *http.Request) error {
 	ctx := req.Context()
 	auth, err := s.store.FindByID(ctx)
 	if err != nil {

@@ -4,7 +4,7 @@ import (
 	"auth/driver/api"
 	"auth/driver/api/domain"
 	"auth/driver/cache"
-	"auth/driver/cache/redis"
+	tokenDriver "auth/driver/cache/token"
 	"auth/driver/db"
 	authDriver "auth/driver/db/auth"
 	"auth/driver/file"
@@ -12,14 +12,15 @@ import (
 	"auth/driver/queue"
 	awsSqs "auth/driver/queue/sqs"
 	"auth/handle"
+	"auth/handle/middleware"
 	"auth/pkg"
 	"auth/pkg/domain/auth"
-	"auth/pkg/domain/oauth"
 	"auth/pkg/domain/token"
 	"auth/util/aws"
 	"auth/util/env"
 	utilLog "auth/util/log"
 	"flag"
+	"fmt"
 )
 
 func init() {
@@ -52,27 +53,29 @@ func main() {
 	if err != nil {
 		logger.Error(err)
 	}
-	// aws session
+
 	sess := aws.New(env)
-	sqs := queue.New(env, sess)
-	s3 := file.New(env, sess)
-	// repository
+	sqsRepo := awsSqs.New(env, queue.New(env, sess))
+	s3Repo := awsS3.New(env, file.New(env, sess))
+
 	client := domain.New(env, cli)
-	rdsRepo := redis.New(env, rds)
-	sqsRepo := awsSqs.New(env, sqs)
-	s3Repo := awsS3.New(env, s3)
-	authRepo := authDriver.New(gormDb)
+
+	fmt.Println(client, sqsRepo, s3Repo)
+
+	rdsRepo := tokenDriver.New(env, rds)
+	authStore := authDriver.New(gormDb)
 	// service
-	authService := auth.New(env, authRepo, rdsRepo)
-	oauthService := oauth.New(env, client, authRepo, rdsRepo, sqsRepo, s3Repo)
-	tokenService := token.New(env, client, authRepo, rdsRepo, sqsRepo, s3Repo)
+	authService := auth.New(env, authStore)
+	tokenService := token.New(env, rdsRepo)
+
+	// middleware
+	middleware := middleware.New(env, logger, authService)
 	// logic
-	logicRepo := pkg.New(
+	logic := pkg.New(
 		*authService,
-		*oauthService,
 		*tokenService,
 	)
 	// new router
-	router := handle.New(env, logger, logicRepo)
+	router := handle.New(env, logger, middleware, logic)
 	router.Start()
 }

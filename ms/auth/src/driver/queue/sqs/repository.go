@@ -7,6 +7,11 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 )
 
+type SqsRepository interface {
+	Send(ctx context.Context) error
+	Receive(ctx context.Context) error
+}
+
 type Repository struct {
 	env    *env.EnvParams[string]
 	client *sqs.SQS

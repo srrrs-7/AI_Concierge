@@ -1,12 +1,20 @@
 package auth
 
 import (
-	"auth/driver/db/model"
-	"auth/pkg/entity"
+	"auth/driver/db/auth/model"
+	"auth/pkg/domain/auth/entity"
 	"context"
 
 	"gorm.io/gorm"
 )
+
+type DbRepository interface {
+	Find(ctx context.Context) (authors []*entity.Auth, err error)
+	FindByID(ctx context.Context) (author *model.Auth, err error)
+	Create(ctx context.Context, body map[string]any) error
+	Update(ctx context.Context) error
+	Delete(ctx context.Context) error
+}
 
 type Repository struct {
 	db *gorm.DB

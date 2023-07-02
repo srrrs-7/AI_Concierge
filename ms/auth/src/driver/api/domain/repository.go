@@ -8,6 +8,13 @@ import (
 	"net/url"
 )
 
+type ApiRepository interface {
+	Get(ctx context.Context, path string, query url.Values) (*http.Response, error)
+	Post(ctx context.Context, path string, query url.Values) (*http.Response, error)
+	Put(ctx context.Context, path string, query url.Values) (*http.Response, error)
+	Delete(ctx context.Context, path string, query url.Values) (*http.Response, error)
+}
+
 type Repository struct {
 	env    *env.EnvParams[string]
 	client api.Client

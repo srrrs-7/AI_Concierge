@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"auth/driver/db/model"
+	"auth/driver/db/auth/model"
 	"crypto/sha256"
 	"encoding/hex"
 	"regexp"

@@ -2,9 +2,7 @@ package pkg
 
 import (
 	"auth/pkg/domain/auth"
-	"auth/pkg/domain/oauth"
 	"auth/pkg/domain/token"
-	"auth/util/env"
 	"net/http"
 )
 
@@ -15,16 +13,13 @@ type Logic interface {
 }
 
 type Repository struct {
-	env   *env.EnvParams[string]
 	auth  auth.Service
-	oauth oauth.Service
 	token token.Service
 }
 
-func New(auth auth.Service, oauth oauth.Service, token token.Service) *Repository {
+func New(auth auth.Service, token token.Service) *Repository {
 	return &Repository{
 		auth:  auth,
-		oauth: oauth,
 		token: token,
 	}
 }

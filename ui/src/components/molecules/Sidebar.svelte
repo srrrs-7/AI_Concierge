@@ -1,4 +1,7 @@
-<script>
+<script lang="ts">
+
+  export let bgColor: string = 'black';
+
   let isOpen = false;
 
   function toggleSidebar() {
@@ -15,14 +18,13 @@
 </div>
 
 <div class="content">
-  <button on:click={toggleSidebar}>サイドバーを開く/閉じる</button>
-  <p>コンテンツがここに表示されます。</p>
+  <button on:click={toggleSidebar}>Toggle</button>
 </div>
 
 <style>
   .sidebar {
     width: 200px;
-    background-color: lightgray;
+    background-color: bgColor;
     height: 100vh;
     position: fixed;
     top: 0;

@@ -9,16 +9,17 @@ import (
 
 type Middleware interface {
 	BasicAuth(next http.Handler) http.Handler
-	Authenticator(next http.Handler) http.Handler
+	Authenticate(next http.Handler) http.Handler
+	Certificate(next http.Handler) http.Handler
 }
 
 type Repository struct {
 	env    *env.EnvParams[string]
 	logger *log.Repository
-	auth   auth.Service
+	auth   *auth.Service
 }
 
-func New(env *env.EnvParams[string], logger *log.Repository, auth auth.Service) *Repository {
+func New(env *env.EnvParams[string], logger *log.Repository, auth *auth.Service) *Repository {
 	return &Repository{
 		env:    env,
 		logger: logger,
@@ -28,7 +29,7 @@ func New(env *env.EnvParams[string], logger *log.Repository, auth auth.Service) 
 
 func (r *Repository) BasicAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		err := r.auth.Auth(req)
+		err := r.auth.BasicAuth(req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 		}
@@ -36,7 +37,14 @@ func (r *Repository) BasicAuth(next http.Handler) http.Handler {
 	})
 }
 
-func (r *Repository) Authenticator(next http.Handler) http.Handler {
+func (r *Repository) Authenticate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		w.Write([]byte("auth"))
+		next.ServeHTTP(w, req)
+	})
+}
+
+func (r *Repository) Certificate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("auth"))
 		next.ServeHTTP(w, req)

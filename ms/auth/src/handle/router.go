@@ -15,15 +15,15 @@ type Repository struct {
 	env        *env.EnvParams[string]
 	logger     *log.Repository
 	middleware middleware.Middleware
-	logicRepo  *pkg.Repository
+	logic      *pkg.Repository
 }
 
-func New(env *env.EnvParams[string], logger *log.Repository, middleware *middleware.Repository, logicRepo *pkg.Repository) *Repository {
+func New(env *env.EnvParams[string], logger *log.Repository, middleware *middleware.Repository, logic *pkg.Repository) *Repository {
 	return &Repository{
 		env:        env,
 		logger:     logger,
 		middleware: middleware,
-		logicRepo:  logicRepo,
+		logic:      logic,
 	}
 }
 
@@ -31,18 +31,30 @@ func (r *Repository) Start() {
 	router := chi.NewRouter()
 
 	router.Use(log.NewLogging)
-	router.Use(r.middleware.BasicAuth)
-	router.Use(r.middleware.Authenticator)
 
 	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("ok"))
 	})
 
+	// master register
+	router.Route("/master", func(c chi.Router) {
+		c.Post("/register", r.logic.Auth)
+		c.Post("/login", r.logic.Auth)
+	})
+
+	// issue auth token
+	router.Route("/auth", func(c chi.Router) {
+		c.Use(r.middleware.Authenticate)
+		c.Post("/authenticate", r.logic.Auth)
+	})
+
+	// issue certificate token
 	router.Route("/oauth", func(c chi.Router) {
-		c.Get("/authorize", r.logicRepo.Auth)
-		c.Get("/callback", r.logicRepo.Auth)
-		c.Post("/token", r.logicRepo.Auth)
-		c.Get("/authenticate", r.logicRepo.Auth)
+		c.Use(r.middleware.BasicAuth)
+		c.Use(r.middleware.Certificate)
+
+		c.Post("/certificate", r.logic.Auth)
 	})
 
 	r.logger.Info(fmt.Sprintf("start server on port: %s", r.env.API_PORT.Value))

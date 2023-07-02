@@ -1,4 +1,4 @@
-package redis
+package token
 
 import (
 	"auth/util/env"
@@ -6,6 +6,11 @@ import (
 
 	"github.com/redis/rueidis"
 )
+
+type RdsRepository interface {
+	Set(ctx context.Context, key, value string) error
+	Get(ctx context.Context, key string) (string, error)
+}
 
 type Repository struct {
 	env   *env.EnvParams[string]

@@ -51,7 +51,6 @@ auth-migrate-down:
 
 # localstack
 localstack_URL="http://localstack:4566"
-
 localstack:
 	localstack status services
 .PHONY: localstack
@@ -59,7 +58,6 @@ localstack:
 # S3
 bucket="aic"
 file="README.md"
-
 bucket:
 	docker compose run --rm aws s3 mb s3://$(bucket) --endpoint-url=$(localstack_URL)
 upload:
@@ -71,7 +69,6 @@ download:
 # SQS
 queue_URL = "http://localstack:4566/000000000000/aic"
 message="Hi!! SQS!"
-
 sqs:
 	docker compose run --rm aws sqs create-queue --queue-name aic --endpoint-url=$(localstack_URL)
 send:

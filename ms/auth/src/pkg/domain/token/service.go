@@ -1,6 +1,7 @@
 package token
 
 import (
+	"auth/driver/cache/token"
 	"auth/util/env"
 )
 
@@ -8,29 +9,14 @@ type UseCase interface {
 }
 
 type Service struct {
-	env    *env.EnvParams[string]
-	client ApiRepository
-	store  DbRepository
-	redis  RdsRepository
-	sqs    SqsRepository
-	s3     S3Repository
+	env   *env.EnvParams[string]
+	redis token.RdsRepository
 }
 
-func New(
-	env *env.EnvParams[string],
-	client ApiRepository,
-	store DbRepository,
-	redis RdsRepository,
-	sqs SqsRepository,
-	s3 S3Repository,
-) *Service {
+func New(env *env.EnvParams[string], redis token.RdsRepository) *Service {
 	return &Service{
-		env:    env,
-		client: client,
-		store:  store,
-		redis:  redis,
-		sqs:    sqs,
-		s3:     s3,
+		env:   env,
+		redis: redis,
 	}
 }
 

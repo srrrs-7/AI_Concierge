@@ -1,4 +1,4 @@
-package redis
+package token
 
 import (
 	"auth/driver/cache"
