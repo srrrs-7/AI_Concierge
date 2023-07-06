@@ -16,9 +16,9 @@
       "@molecules/*": ["src/components/molecules/*"],
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@store/*": ["src/store/*"],
+      "@store/*": ["src/domain/calendar/store/*"],
       "@util/*": ["src/util/*"],
-      "@validate/*": ["src/validate/*"]
+      "@validate/*": ["src/domain/calendar/validate/*"]
     }
   },
   "include": ["src"]

@@ -20,6 +20,8 @@ func New(env *env.EnvParams[string], redis token.RdsRepository) *Service {
 	}
 }
 
-func (s *Service) Generate() {}
+func (s *Service) Generate() {
+
+}
 
 func (s *Service) Valid() {}

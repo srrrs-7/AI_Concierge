@@ -46,7 +46,9 @@ func (r *Repository) Start() {
 	// issue auth token
 	router.Route("/auth", func(c chi.Router) {
 		c.Use(r.middleware.Authenticate)
+
 		c.Post("/authenticate", r.logic.Auth)
+		c.Get("/callback", r.logic.Auth)
 	})
 
 	// issue certificate token

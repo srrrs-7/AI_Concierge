@@ -8,6 +8,9 @@ services:
     command: sh -c "npm i && npm run start"
     volumes:
       - ./ui:/app
+    networks:
+      - aic-network
+
   #storybook
   storybook:
     build:
@@ -171,7 +174,6 @@ services:
       - aic-network
   # AWS CLI
   aws:
-    container_name: aws
     image: amazon/aws-cli
     environment:
       AWS_ACCESS_KEY_ID: foo
@@ -180,6 +182,14 @@ services:
       NO_PROXY: 169.254.169.254
     networks:
       - aic-network
+
+  # Flutter
+  flutter:
+    build:
+      context: ./.images
+      dockerfile: flutter.Dockerfile
+    volumes:
+      - ./flutter:/app
 
 networks:
   aic-network:

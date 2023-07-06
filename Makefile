@@ -86,3 +86,8 @@ uml:
 redoc:
 	docker compose up redoc -d --build
 .PHONY: redoc
+
+# Flutter
+flutter:
+	docker compose up flutter -d --build
+.PHONY: flutter
