@@ -1,7 +1,7 @@
 type Env = {
-  STAMP_API_ENDPOINT: string;
+  CALENDAR_API_ENDPOINT: string | undefined;
 };
 
 export const env: Env = {
-  STAMP_API_ENDPOINT: process.env.STAMP_API_ENDPOINT
+  CALENDAR_API_ENDPOINT: process.env.CALENDAR_API_ENDPOINT
 };

@@ -11,7 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "@i18n/*": ["src/_i18next/*"],
-      "@api/*": ["src/api/*"],
+      "@api/*": ["src/domain/calendar/api/*"],
       "@atoms/*": ["src/components/atoms/*"],
       "@molecules/*": ["src/components/molecules/*"],
       "@components/*": ["src/components/*"],
