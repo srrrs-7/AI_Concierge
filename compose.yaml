@@ -183,14 +183,6 @@ services:
     networks:
       - aic-network
 
-  # Flutter
-  flutter:
-    build:
-      context: ./.images
-      dockerfile: flutter.Dockerfile
-    volumes:
-      - ./flutter:/app
-
 networks:
   aic-network:
     driver: bridge

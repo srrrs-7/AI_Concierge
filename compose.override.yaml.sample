@@ -38,10 +38,6 @@ services:
     ports:
       - "6379:6379"
 
-  flutter:
-    ports:
-      - 8888:8888
-
 secrets:
   ssh-key:
     file: ~/.ssh/ec2.pem
