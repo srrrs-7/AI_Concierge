@@ -78,7 +78,7 @@ receive:
 .PHONY: sqs sqs-send sqs-receive
 
 # PlantUML
-uml:
+plant-uml:
 	docker compose up plant-uml -d --build
 .PHONY: uml
 
@@ -86,8 +86,3 @@ uml:
 redoc:
 	docker compose up redoc -d --build
 .PHONY: redoc
-
-# Flutter
-flutter:
-	docker compose up flutter -d --build
-.PHONY: flutter

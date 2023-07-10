@@ -1,7 +1,8 @@
 package middleware
 
 import (
-	"auth/pkg/domain/auth"
+	"auth/driver/db/client_master"
+	"auth/driver/db/client_token"
 	"auth/util/env"
 	"auth/util/log"
 	"net/http"
@@ -9,37 +10,31 @@ import (
 
 type Middleware interface {
 	BasicAuth(next http.Handler) http.Handler
-	Authenticate(next http.Handler) http.Handler
 	Certificate(next http.Handler) http.Handler
 }
 
 type Repository struct {
 	env    *env.EnvParams[string]
 	logger *log.Repository
-	auth   *auth.Service
+	master client_master.Store
+	token  client_token.Store
 }
 
-func New(env *env.EnvParams[string], logger *log.Repository, auth *auth.Service) *Repository {
+func New(env *env.EnvParams[string], logger *log.Repository, master client_master.Store, token client_token.Store) *Repository {
 	return &Repository{
 		env:    env,
 		logger: logger,
-		auth:   auth,
+		master: master,
+		token:  token,
 	}
 }
 
 func (r *Repository) BasicAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		err := r.auth.BasicAuth(req)
+		err := r.master.BasicAuth(req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 		}
-		next.ServeHTTP(w, req)
-	})
-}
-
-func (r *Repository) Authenticate(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		w.Write([]byte("auth"))
 		next.ServeHTTP(w, req)
 	})
 }

@@ -1,4 +1,5 @@
-package auth
+package authorization_code
+package
 
 import "testing"
 

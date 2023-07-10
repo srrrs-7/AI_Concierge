@@ -40,22 +40,18 @@ func (r *Repository) Start() {
 	// master register
 	router.Route("/master", func(c chi.Router) {
 		c.Post("/register", r.logic.Auth)
-		c.Post("/login", r.logic.Auth)
+		c.Get("/logout", r.logic.Auth)
 	})
 
 	// issue auth token
-	router.Route("/auth", func(c chi.Router) {
-		c.Use(r.middleware.Authenticate)
-
-		c.Post("/authenticate", r.logic.Auth)
-		c.Get("/callback", r.logic.Auth)
+	router.Route("/authorize", func(c chi.Router) {
+		c.Use(r.middleware.BasicAuth)
+		c.Get("/code", r.logic.Auth)
 	})
 
 	// issue certificate token
-	router.Route("/oauth", func(c chi.Router) {
-		c.Use(r.middleware.BasicAuth)
+	router.Route("/certificate", func(c chi.Router) {
 		c.Use(r.middleware.Certificate)
-
 		c.Post("/certificate", r.logic.Auth)
 	})
 
