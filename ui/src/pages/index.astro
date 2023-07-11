@@ -1,8 +1,8 @@
 ---
-import Header from '@layouts/Header.svelte';
-import Translate from '@layouts/Translate.svelte';
 import Atom_Timer from '@components/atoms/Timer.svelte';
 import Atom_Pull from '@components/atoms/Pulldown.svelte';
+import Calendar from "@components/organisms/Calendar.svelte";
+import Header from '@components/organisms/Header.svelte';
 
 // pull down props
 let contents: string[] = ['svelte', 'react', 'vue'];
@@ -17,11 +17,11 @@ let contents: string[] = ['svelte', 'react', 'vue'];
   </head>
 
   <body>
+    <a href="/login">Login</a>
     <Header client:load />
-    <Translate client:load />
     <Atom_Timer client:load />
     <Atom_Pull client:load contents={contents} />
 
-    <a href="/login">Login</a>
+    <Calendar client:load />
   </body>
 </html>

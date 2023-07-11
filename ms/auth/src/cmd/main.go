@@ -6,7 +6,6 @@ import (
 	"auth/driver/cache"
 	tokenDriver "auth/driver/cache/token"
 	"auth/driver/db"
-	authDriver "auth/driver/db/auth"
 	"auth/driver/file"
 	awsS3 "auth/driver/file/s3"
 	"auth/driver/queue"
@@ -14,7 +13,7 @@ import (
 	"auth/handle"
 	"auth/handle/middleware"
 	"auth/pkg"
-	"auth/pkg/domain/auth"
+	auth "auth/pkg/domain/authorization"
 	"auth/pkg/domain/token"
 	"auth/util/aws"
 	"auth/util/env"
@@ -63,7 +62,7 @@ func main() {
 	fmt.Println(client, sqsRepo, s3Repo)
 
 	rdsRepo := tokenDriver.New(env, rds)
-	authStore := authDriver.New(gormDb)
+	authStore := auth.New(gormDb)
 	// service
 	authService := auth.New(env, authStore)
 	tokenService := token.New(env, rdsRepo)

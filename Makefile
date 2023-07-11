@@ -16,9 +16,9 @@ ui-start:
 ui-sb-test:
 	npm run test-storybook
 ui-fmt:
-	docker compose run --rm ui npx prettier --write ./src
+	docker compose run --rm ui npx prettier --write ./src ./test
 ui-lint:
-	docker compose run --rm ui npx eslint --fix ./src
+	docker compose run --rm ui npx eslint --fix ./src ./test
 ui-test:
 	docker compose run --rm ui npm run test
 ui-build:

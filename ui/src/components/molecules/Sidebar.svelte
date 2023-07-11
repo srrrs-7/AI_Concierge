@@ -1,5 +1,4 @@
 <script lang="ts">
-
   export let bgColor: string = 'black';
 
   let isOpen = false;
